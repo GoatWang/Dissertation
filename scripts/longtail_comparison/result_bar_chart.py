@@ -53,7 +53,7 @@ for i, (r1_coord, r2_coord, diff) in enumerate(zip(r1, r2, differences)):
 # Labeling
 ax.set_xlabel('Segments')
 ax.set_ylabel('mAP Score')
-ax.set_title('Comparison of mAP scores for CARe and IC models')
+# ax.set_title('Comparison of mAP scores for CARe and IC models')
 ax.set_xticklabels(categories)
 ax.legend()
 

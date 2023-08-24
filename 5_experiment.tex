@@ -1,6 +1,4 @@
 \section{CLIP with Prompt Engineering}
-
-
 \subsection{Video CLIP or Image CLIP?}
 Before entering the experiment on the long-tail issue, I first need to decide whether to use video CLIP or image CLIP for action recognition. To make this decision, I experiment with three model settings: 
 
@@ -53,11 +51,11 @@ In this experiment, I want to investigate whether text embedding assists in addr
     \label{fig:tp_longtailcomp}
 \end{figure}
 
-% In adddition, to investigate further. I experiment the following two model settings: 
+% In addition, to investigate further. I experiment with the following two model settings: 
 
 % \begin{enumerate}
 %     \item IC: Image Clip with learning target of class embedding
-%     \item IC\_onehot: Image Clip with learning target of onehot encoding
+%     \item IC\_onehot: Image Clip with learning target of one-hot encoding
 % \end{enumerate}
 
 
@@ -95,7 +93,7 @@ To assess the impact of AFRICAN pretraining, I compare the performance of the CL
     \label{fig:tp_africanpretraining}
 \end{figure}
 
-To delve deeper, I draw attention maps for the vision transformer within the model. Thanks to the transformer's query-key-value mechanism, these maps can be computed by accumulating the connection weights between the keys and queries across all layers. This approach helps highlight the most frequently queried keys and identify the patches that heavily influence the final output. The attention maps using this method on different videos are shown in Figures \ref{fig:attnmap1} and \ref{fig:attnmap2}. Clearly, the attention map from the with-AFRICAN model is more adept at pinpointing the animal and even its boundary compared to the "w/o-AFRICAN" model.
+To delve deeper, I draw attention maps for the vision transformer within the model. Thanks to the transformer's query-key-value mechanism, these maps can be computed by accumulating the connection weights between the keys and queries across all layers. This approach helps highlight the most frequently queried keys and identify the patches that heavily influence the final output. The attention maps using this method on different videos are shown in Figures \ref{fig:attnmap1} and \ref{fig:attnmap2}. Clearly, the attention map from the with-AFRICAN model is more adept at pinpointing the animal and even its boundary compared to the w/o-AFRICAN model.
 
 \begin{figure}[ht]
     \centering
@@ -118,9 +116,9 @@ To delve deeper, I draw attention maps for the vision transformer within the mod
 
 
 \subsection{AFRICAN for Action Recognition}
-The AFRICAN model for action recognition denoted as AFRICAN-AR, the structure is illustrated in Figure \ref{fig:modelstructaf_ar}, which is trained with a binary cross-entropy loss and adamw optimizer, using a learning rate of 0.00015 on a single A100 GPU. Since the Image CLIP model converged earlier than Video CLIP based model, as illustrated in Figure \ref{fig:tp_backbone}where the IC model does not improve after Epoch 40, I train the model for 40 epochs for the experiment. The mAP is also used as the evaluation metric in this task.
+The AFRICAN model for action recognition denoted as AFRICAN-AR, the structure is illustrated in Figure \ref{fig:modelstructaf_ar}, which is trained with a binary cross-entropy loss and adamw optimizer, using a learning rate of 0.00015 on a single A100 GPU. Since the video clip module of the InterVideo takes longer to converge, as illustrated in Figure \ref{fig:tp_backbone} where the IC model does not improve after Epoch 40, I train the model for 40 epochs for the experiment. The mAP is also used as the evaluation metric in this task.
 
-The results for action recognition at Epoch 40 are presented in Table \ref{tab:allresults40}, and the results at the best epoch are shown in Table \ref{tab:allresultsbest}. With the stream of AFRICAN pretrained weights, the AFRICAN-AR are able to outperforms the other models in all measured aspects at Epoch 40, with an overall mean Average Precision (mAP) of 54.02\%. At the best epoch, the AFRICAN-AR model generally performs best with an overall mAP of 55.08\%, except in the Tail metric, where IC takes the lead with 48.96\%.
+The results for action recognition at Epoch 40 are presented in Table \ref{tab:allresults40}, and the results at the best epoch are shown in Table \ref{tab:allresultsbest}. With the stream of AFRICAN pretrained weights, the AFRICAN-AR are able to outperform the other models in all measured aspects at Epoch 40, with an overall mean Average Precision (mAP) of 54.02\%. At the best epoch, the AFRICAN-AR model generally performs best with an overall mAP of 55.08\%, except in the Tail metric, where IC takes the lead with 48.96\%.
 
 
 \begin{table}[h]

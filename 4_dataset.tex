@@ -1,5 +1,5 @@
 \section{Introduction}
-The Animal Kingdom dataset was proposed in CVPR 2022, which contains 50 hours of video clips with up to 850 unique species and 140 fine-grained classes of actions for action recognition. In addition, the footage provided are shooted in diverse environmental conditions (e.g., grassland, forests, rivers, oceans) \parencite{ng2022animal}.
+The Animal Kingdom dataset was proposed in CVPR 2022, which contains 50 hours of video clips with up to 850 unique species and 140 fine-grained classes of actions for action recognition. In addition, the footage provided is shot in diverse environmental conditions (e.g., grassland, forests, rivers, oceans) \parencite{ng2022animal}.
 
 \section{Action Classes Frequency Distribution}
 
@@ -7,11 +7,11 @@ The Animal Kingdom dataset was proposed in CVPR 2022, which contains 50 hours of
     \centering
     % \includegraphics[width=1.0\textwidth]{assets/imgs/4_1_LongTail}
     \resizebox{1.0\textwidth}{!}{\input{"assets/imgs/4_1_LongTail.pgf"}}
-    \caption[Action Classes Frequency Distribution]{This Chart shows the long-tail distribution of action class frequency. The action classes in green color are frequent classes, while the action classes in blue and red color are less frequent or rare classes.}
+    \caption[Action Classes Frequency Distribution]{This Chart shows the long-tail distribution of action class frequency. The action classes in green colour are frequent classes, while the action classes in blue and red colour are less frequent or rare classes.}
     \label{fig:classfreqdist}
 \end{figure}
 
-Figure \ref{fig:classfreqdist} illustrate the lond-tail features of the dataset. It is obvious that the dataset is highly imbalanced. The frequent classes are accounts for 80\% of the dataset, while the less frequent and rare classes are only accounts for less than 20\% of the dataset
+Figure \ref{fig:classfreqdist} illustrates the lond-tail features of the dataset. It is obvious that the dataset is highly imbalanced. The frequent classes account for 80\% of the dataset, while the less frequent and rare classes only account for less than 20\% of the dataset
 
 \section{Baseline}
 The dataset paper also proposed its own model, Collaborative Action Recognition (CARe), for action recognition. It can achieve 30.55 on overall mAP, 63.33 mAP for head classes, 38.62 for middle classes, and 25.09 for tail classes.

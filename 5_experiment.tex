@@ -1,0 +1,181 @@
+\section{CLIP with Prompt Engineering}
+
+
+\subsection{Video CLIP or Image CLIP?}
+Before entering the experiment on the long-tail issue, I first need to decide whether to use video CLIP or image CLIP for action recognition. To make this decision, I experiment with three model settings: 
+
+\begin{enumerate}
+    \item VC\_Vision: Video Clip trained on all vision layers, as illustrated in Figure \ref{fig:modelstructic1} with a learnable video encoder.
+    \item VC\_Proj: Video Clip trained only on projection layers, as illustrated in Figure \ref{fig:modelstructic1} with a frozen video encoder.
+    \item IC: Image Clip trained on post-transformer layers, as illustrated in Figure \ref{fig:modelstructic2} with a frozen video encoder.
+\end{enumerate}
+
+For all three of these experiments, models are trained with a binary cross-entropy loss function and the adamw optimizer, using a learning rate of 0.00015 on a single A100 GPU. They are all trained for 70 epochs. Due to memory limitations, I use a batch size of 16 for the VC\_Vision model, but 128 for the VC\_Proj and IC models. Referring to animal kingdom settings \parencite{ng2022animal}, the evaluation metrics used for this task include mean Average Precision (mAP) on the overall, head, middle, and tail classes, as provided by the dataset. 
+
+% TODO
+%The effect of batch size for Video CLIP will be further discussed in Section \ref{sec:ablation_bs}.
+
+The results of the three experiments are shown in Table \ref{tab:resultsbackbone}, and the performance on each epoch during the training process is shown in Figure \ref{fig:tp_backbone}. As illustrated in the figure, the IC model significantly outperforms the other two models. Specifically, the VC\_vision model achieves a 27.19\% mAP on the overall dataset, the lowest among all the experiments. The VC\_Proj model attains a 49.86\% mAP on the overall dataset, making it the second lowest among all the experiments. Conversely, the IC model achieves a 54.79\% mAP on the overall dataset, the highest among all the other experiments. Although both the IC and VC\_Proj models already outperform the baseline model, CARe, which registers a 30.55\% mAP on the overall dataset, the IC model surpasses the VC\_Proj model by 4.81\% mAP on the overall dataset. Therefore, I have chosen to use the IC model for the following experiments. For further discussion about the performance of Image CLIP and Video CLIP, please refer to Section \ref{sec:ablation_vc}.
+
+\begin{table}[ht]
+    \centering
+    \caption{Training Results for Visual Encoder Selection}
+    \label{tab:resultsbackbone}
+    \begin{tabular}{lllll}
+        \toprule
+        \multirow{2}{*}{Models} & \multicolumn{4}{c}{mAP} \\
+        \cmidrule{2-5} 
+        {} & Overall & Head  & Middle & Tail \\
+        \midrule
+        CARe        & 30.55   & 63.33 & 38.62 & 25.09 \\
+        VC\_Vision  & 27.19   & 46.23 & 36.72 & 19.78 \\
+        VC\_Proj    & 49.86   & 59.31 & 54.13 & 45.80 \\
+        IC          & \textbf{54.79}   & \textbf{71.73} & \textbf{63.31} & \textbf{49.07} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{figure}[ht]
+    \centering
+    % \includegraphics[width=1.0\textwidth]{assets/imgs/5_1_BackboneSelection.pgf}
+    \resizebox{1.0\textwidth}{!}{\input{"assets/imgs/5_1_BackboneSelection.pgf"}}
+    \caption[mAP performance on each epoch for VC\_Vision, VC\_Proj, and IC]{This chart illustrates the mAP performance of the models on each epoch.}
+    \label{fig:tp_backbone}
+\end{figure}
+
+\subsection{Does Text Embedding Help with the Long-Tail Issue?}
+In this experiment, I want to investigate whether text embedding assists in addressing the long-tail issue. This can be done by comparing the performance on each segment of the IC and CARe models. The IC model aims to output a class embedding as its learning target, while the CARe model outputs one-hot encoding results. From Figure \ref{fig:tp_longtailcomp}, it is obvious that the majority of the performance improvement comes from the middle and tail classes. The performance improvement on the head classes is only 6.2\%, while the improvements on the middle and tail classes are 21.9\% and 20.7\%, respectively. This result indicates that text embedding does indeed help with the long-tail issue. 
+
+\begin{figure}[ht]
+    \centering
+    \resizebox{1.0\textwidth}{!}{\input{"assets/imgs/5_2_LongTailResultComparison.pgf"}}
+    \caption[mAP performance on the best epoch for CARe and IC]{This chart illustrates the performance differences for each segment of actions for the CARe and IC models.}
+    \label{fig:tp_longtailcomp}
+\end{figure}
+
+% In adddition, to investigate further. I experiment the following two model settings: 
+
+% \begin{enumerate}
+%     \item IC: Image Clip with learning target of class embedding
+%     \item IC\_onehot: Image Clip with learning target of onehot encoding
+% \end{enumerate}
+
+
+
+
+
+
+\section{AFRICAN}
+\subsection{AFRICAN Pretraining}
+% \subsubsection{Training Result}
+The model is trained with infoNCE \parencite{oord2019representation} loss, using the adamw optimizer with a learning rate of 0.00003. In each batch, the model processes one video as input, which is then sampled into 8 frames for embedding and similarity matrix computation. The model is trained for 50 epochs on a single NVIDIA A100 GPU. As contrastive learning can be defined as a binary classification task, accuracy serves as the evaluation metric.
+
+To assess the impact of AFRICAN pretraining, I compare the performance of the CLIP model with and without AFRICAN pretraining, denoted as "with-AFRICAN" and "w/o-AFRICAN", respectively. The results are presented in Table \ref{tab:africanpretrainingresults}, and the epoch-wise performance is visualized in Figure \ref{fig:tp_africanpretraining}. The findings suggest that the model is able to ditinguish the identity source of augmented images with almost 80\% accuracy. 
+
+\begin{table}[ht]
+    \centering
+    \caption{Training Results for AFRICAN Pretraining}
+    \label{tab:africanpretrainingresults}
+    \begin{tabular}{lllll}
+        \toprule
+        \multirow{2}{*}{Models} & \multicolumn{2}{c}{Accuracy} \\
+        \cmidrule{2-3} 
+        {} &  Best & Epoch 50\\
+        \midrule
+        w/o-AFRICAN   & 30.36 & 30.36 \\
+        with-AFRICAN  & 79.29 & 78.19 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{figure}[ht]
+    \centering
+    \resizebox{1.0\textwidth}{!}{\input{"assets/imgs/5_3_AFRICANPretrainingProcess.pgf"}}
+    \caption[Accuracy on each epoch for AFRICAN Pretraining]{This chart illustrates the epoch-wise performance of AFRICAN pretraining.}
+    \label{fig:tp_africanpretraining}
+\end{figure}
+
+To delve deeper, I draw the attention maps for the vision transformer within the model. Thanks to the transformer's query-key-value mechanism, these maps can be computed by accumulating the connection weights between the keys and queries across all layers. This approach helps highlight the most frequently queried keys and identify the patches that heavily influence the final output. The attention maps using this method on different videos are shown in Figures \ref{fig:attnmap1} and \ref{fig:attnmap2}. Clearly, the attention map from the with-AFRICAN model is more  adept at pinpointing the animal and even its boundary compared to the "w/o-AFRICAN" model.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.0\textwidth]{assets/imgs/5_4_AttentionMaps_1}
+    \caption[Attention Map 1]{The attention map for three videos. The first row is the input video, the second row is the attention map of the w/o-AFRICAN model, and the third row is the attention map of the with-AFRICAN model.}
+    \label{fig:attnmap1}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.0\textwidth]{assets/imgs/5_4_AttentionMaps_2}
+    \caption[Attention Map 1]{The same with Figure \ref{fig:attnmap1} for another three videos.}
+    \label{fig:attnmap2}
+\end{figure}
+
+
+
+
+
+
+
+\subsection{AFRICAN for Action Recognition}
+The AFRICAN model for Action Recognition, denote as AFRICAN-AR, structure is illustrated in Figure \ref{fig:modelstructaf_ar}, which is trained with a binary cross-entropy loss and adamw optimizer, using a learning rate of 0.00015 on a single A100 GPU. Since Image CLIP based model is converged earlier than Video CLIP based model, as illustrated in Figure \ref{fig:tp_backbone}where the IC model does not improve after Epoch 40, I train the model for 40 epochs for the experiment. The mAP is also used as the evaluation metric in this task.
+
+The results for action recognition at Epoch 40 are presented in Table \ref{tab:allresults40}, and the results at the best epoch are shown in Table \ref{tab:allresultsbest}. With the stream of AFRICAN pretrained weights, the AFRICAN-AR are able to outperforms the other models in all measured aspects at Epoch 40, with an overall mean Average Precision (mAP) of 54.02\%. At the best epoch, the AFRICAN-AR model generally performs best with an overall mAP of 55.08\%, except in the Tail metric, where IC takes the lead with 48.96\%.
+
+
+\begin{table}[h]
+    \centering
+    \caption{Results of action recognition (Epoch 40)}
+    \label{tab:allresults40}
+    \begin{tabular}{lllll}
+        \toprule
+        \multirow{2}{*}{Models} & \multicolumn{4}{c}{mAP} \\
+        \cmidrule{2-5} 
+        {} & Overall & Head  & Middle & Tail \\
+        \midrule
+        CARe          & 30.55   & 63.33 & 38.62 & 25.09 \\
+        IC            & 52.33   & 69.53 & 60.52 & 45.79 \\        
+        AFRICAN-AR    & \textbf{54.02} & \textbf{73.54} & \textbf{64.38} & \textbf{46.21} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{table}[h]
+    \centering
+    \caption{Results of action recognition (Best Epoch)}
+    \label{tab:allresultsbest}
+    \begin{tabular}{lllll}
+        \toprule
+        \multirow{2}{*}{Models} & \multicolumn{4}{c}{mAP} \\
+        \cmidrule{2-5} 
+        {} & Overall & Head  & Middle & Tail \\
+        \midrule
+        CARe        & 30.55   & 63.33 & 38.62  & 25.09 \\
+        IC          & 54.67   & 71.72 & 63.31 & \textbf{48.96} \\
+        AFRICAN     & \textbf{55.08} & \textbf{74.16} & \textbf{65.60} & 47.75 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+
+
+
+
+
+% % Need ICs1_B
+% % Need ICAFs1_B
+% % Need ICs1loh B (failed)
+% % Need ICs1loh F
+% % Need VCs1dd_bs008 F
+% % Need VCs1dd_bs032 F
+% % Need VCs1_B no text embedding proj
+
+
+% TODO
+% 0. evaluate on the best score
+% 1. Add VC vs. IC Section of Ablation Study (Further training 2 epochs for VCdd)
+% 2. Update Table for Backbone Selection (wait ICs1_B)
+% 3. Update Table For AFRICAN-AR (wait ICAFs1_B)
+% 4. (Time Permmited) Add FocalLoss of IC Section Ablation Study
+% 4. (Time Permmited) Add batch size section of Ablation Study (VCs1dd_bs008_B and VCs1dd_bs008_B)
+

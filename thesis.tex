@@ -1,0 +1,182 @@
+\documentclass[
+  % ieee        % uncomment for IEEE bibliography style
+]{uob-thesis}
+
+\usepackage{lipsum}
+\usepackage{tikz}
+\usepackage{adjustbox}
+\usepackage{booktabs}
+\usepackage{multirow}
+
+\addbibresource{refs.bib}
+% \printbibliography
+%%%%%%%%%%%%%%%%%%%
+%% AUTHOR DETAILS %
+%%%%%%%%%%%%%%%%%%%
+
+
+\title{Action Frame Identity Contrstive Learning (AFRICAN) For Animal Action Recognition} %TODO: change title
+\subtitle{ on Animal Kingdom Dataset} %TODO: change title
+\author{Hsuan-Chung, Wang}
+
+\DTMsavedate{thesisdate}{2023-02-02}        % do not change name, will be re-used
+\date{\printdatewithoutmonth{thesisdate}}
+
+% change as appropriate, e.g.
+%   Master of Science by advanced study in Computer Science (Conversion)
+%   Bachelor of Science in Computer Science
+%   Master of Engineering in Computer Science
+\degree{COMPUTER SCIENCE (MSC)}
+
+\school{School~of~Computer~Science}
+\faculty{Faculty~of~Engineering}
+
+\wordcount{1234} %TODO: change title
+
+\begin{document}
+
+%%% -------------------------------------------------------------
+%%% THESE TITLE PAGES ARE SPECIFIED BY THE REGULATIONS
+%%% DO NOT CHANGE ORDER 
+%%%
+%%% comment out to remove any section
+
+\maketitle
+\cleardoubleoddemptypage
+
+\begin{abstract} %TODO: finish it
+
+  % Abstract should be not more than 300 words, for either MSc or PhD.
+
+  This section should pr\'{e}cis the project context, aims and objectives,
+  and main contributions (e.g. deliverables) and achievements; the same 
+  section may be called an abstract elsewhere.  The goal is to ensure the 
+  reader is clear about what the topic is, what you have done within this 
+  topic, \emph{and} what your view of the outcome is.
+
+  The former aspects should be guided by your specification: essentially 
+  this section is a (very) short version of what is typically the first 
+  chapter. If your project is experimental in nature, this should include 
+  a clear research hypothesis.  This will obviously differ significantly
+  for each project, but an example might be as follows:
+
+  \begin{quote}
+    My research hypothesis is that a suitable genetic algorithm will yield
+    more accurate results (when applied to the standard ACME data set) than 
+    the algorithm proposed by Jones and Smith, while also executing in less
+    time.
+  \end{quote}
+
+  The latter aspects could be presented as a concise, factual bullet point list.
+  Again the points will differ for each project, but might be as follows:
+
+  \begin{quote}
+    \begin{itemize}
+    \item I spent $120$ hours collecting material on and learning about the Java
+      garbage-collection subsystem. 
+    \item I wrote a total of $5000$ lines of source code, comprising a Linux
+      device driver for a robot (in C) and a GUI (in Java) that is used to
+      control it.
+    \item I designed a new algorithm for computing the non-linear mapping from
+      A-space to B-space using a genetic algorithm, see page $17$.
+    \item I implemented a version of the algorithm proposed by
+      \textcite{qian2021}, corrected a mistake in it, and compared the results
+      with several alternatives.
+    \end{itemize}
+  \end{quote}
+\end{abstract}
+
+\begin{dedication}  %TODO: finish it
+  To my darling mama,\\
+  sine-qua-non.
+\end{dedication}
+
+\begin{acknowledgements}
+It is common practice (although totally optional) to acknowledge any third-party
+advice, contribution or influence you have found useful during your work.
+Examples include support from friends or family, the input of your Supervisor
+and/or Advisor, external organisations or persons who  have supplied resources
+of some kind (e.g., funding, advice or time), and so on.
+\end{acknowledgements}
+
+\begin{declaration}
+  I declare that the work in this dissertation was carried out in accordance
+  with the requirements of the University's Regulations and Code of Practice for
+  Taught Programmes/Research Degree Programmes {\color{red} (delete as
+  appropriate)} and that it has not been submitted for any other academic award.
+  Except where indicated by specific reference in the text, the work is the
+  candidate's own work. Work done in collaboration with, or with the assistance
+  of, others, is indicated as such. Any views expressed in the
+  dissertation are those of the author.
+  
+  \vspace{2cm}
+
+  \includegraphics[width=4cm]{sig} %TODO: change sig.png
+\end{declaration}
+
+%%%
+%%% TITLE PAGES END HERE
+%%% -----------------------------------------------------
+
+
+%%%
+%% FRONT MATTER
+%%%
+
+\frontmatter
+
+%% THESE MUST BE IN THIS ORDER ACCORDING TO REGULATIONS
+\tableofcontents
+\listoftables
+\listoffigures
+
+
+%%%%%%%%%%%%%%%%
+%% MAIN MATTER %
+%%%%%%%%%%%%%%%%
+
+\mainmatter
+
+\chapter{Introduction}
+
+  \input{1_intro}
+
+\chapter{Related Work}
+
+  \input{2_relatedwork}
+
+\chapter{Methodology}
+
+  \input{3_methodology}
+
+\chapter{Dataset}
+
+  \input{4_dataset}
+
+\chapter{Experiment}
+
+  \input{5_experiment}
+
+\chapter{Conclusion}
+
+  \input{6_conclusion}
+
+\chapter{Ablation}
+
+  \input{7_ablation}
+
+\chapter{Future Work}
+
+  \input{8_futurework}
+
+%%%%%%%%%%%%%%%%
+%% BACK MATTER %
+%%%%%%%%%%%%%%%%
+
+\backmatter
+
+\chapter*{Bibliography}
+
+\printbibliography[heading=none]
+
+\end{document}

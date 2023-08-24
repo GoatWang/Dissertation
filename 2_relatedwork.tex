@@ -1,0 +1,57 @@
+
+\section{Long-Tail Issue}
+In previous researches, the three main groups of techniques are employed to deal with the long-tail issue: Re-weighting, Re-sampling, and Few-Shot Learning.
+
+\subsection{Re-weighting}
+Re-weighting is a technique used to apply varying weights of penalty for specific group of classes or samples. This typically achieved by modifying the loss function. The most vanilla re-weighting scheme involves applying the inverse class frequency to the loss. In this manner, more frequent classes will receive a lower weight of loss, enabling the model to put more emphasis on the tail classes \parencite{khan2017cost, mostajabi2015feedforward}.
+
+However, it has been proved that as the number of samples increases, the marginal benefit on the model performance diminishes. As a result, directly applying the inverse class frequency to loss function may excessively reduce the weight of losses for the frequent classes. Class Balanced Loss (CB Loss) has been proposed to resolve this issue. CB Loss calculates the effective number of samples to balance the inverse class frequency, yielding a more reasonable weight for the loss \parencite{cui2019class}.
+
+In contrast to frequency-based re-weighting, Focal Loss focuses on the level of learning difficulties. It scales the penalty to automatically down-weight the contribution of easy examples, which enforces the model to focus on the hard examples \parencite{lin2017focal}.
+
+Label-Distribution-Aware Margin (LDAM) Loss inspired by hinge loss in support vector machine. The design of LDAM ensures that the model must have a closer decision boundary when classifying frequent classes, meaning that the model must output a higher confidence probability to achieve a better score \parencite{cao2019learning}.
+
+% TODO: some connectivity should be added here
+In the context of videos, re-weighting may not be the best strategy to overcome long-tail issue. Considering the varying amounts of information in a single video, adjusting the weights to tail classes is likely to introduce noise into the training process \parencite{zhang2021videolt}. 
+
+\subsection{Re-sampling}
+Re-sampling refers to the intuitive use of sampling algorithms to balance the numbers of samples for each class. Several early research studies have applied this technique to enhance the model performance \parencite{shen2016relay, 5128907, mahajan2018exploring}.
+
+Precious research had also found that data imbalance itself does not affect the performance of representation learning. Although re-sampling has led to better performance on the classification result, it actually benefit the classifier learning while harming the representation learning. Consequently, subsequent research has focused more on the the re-sampling techniques used in classifier training \parencite{zhou2020bbn, kang2019decoupling}.
+
+Compared to the previous method that focused on the re-sampling algorithm, the following research has attempted to reconstruct more samples. VideoLT, for example, concatenates frames from different videos to generate more tail samples \parencite{zhang2021videolt}. Reconstruction of samples in the embedding space has also been explored \parencite{liu2022long, perrett2023use}.
+
+These re-sampling techniques certainly mitigate poor performance in the tail classes. Nevertheless, they do not guarantee the production of samples with same variety and correctness as the collected data.
+
+\subsection{Few-Shot Learning}
+More recent research is concentrating on learning techniques that require fewer training data to achieve acceptable performance.
+
+Model-Agnostic Meta-Learning (Moco) \parencite{finn2017model} proposed the concept of learning to initialise better parameters for training. This has led to a series of studies on meta-learning. Apart from initialisation \parencite{nichol2018first, 2018Reptile}, a large amount of research has begun to apply meta-learning to search for different hyperparameters such as optimization techniques \parencite{andrychowicz2016learning}, data augmentation \parencite{li2020dada, galashov2022data, cubuk2018autoaugment}, and even re-weighting strategies \parencite{shu2019meta}.
+
+With the ability to learn from the small size of data, few-shot learning techniques can also mitigate the long-tail issue. MetaModelNet, for example, regresses the parameters from models trained with less data to the parameters from model trained with more data \parencite{NIPS2017_147ebe63}. Besides, some studies have shown that augmentation or memory retrieval in the embedding space are effective ways to handle tail classes \parencite{liu2019large, Zhu_2020_CVPR, li2021metasaug, Fu_2022_ACCV}.
+
+These methods either focus on few-shot learning or generalise the representation learned from the head classes to the tail classes. In contrast with these methods, Contrastive Vision-Language Pre-training (CLIP) \parencite{radford2021learning} embed both images and sentences into the same semantic space. This enables the model to truly leverage human intelligence to understand visual data as well as balance the distribution of learning targets \parencite{ma2022x}. 
+
+With these advantages, CLIP has been utilised in several image downstream tasks including few-shot learning \parencite{zhang2022tip}, segmentation \parencite{wang2022cris}, video retrieval \parencite{ma2022x}, object detection \parencite{lin2023gridclip}, and captioning \parencite{mokady2021clipcap}. In addition, CLIP for videos have also been proposed \parencite{xu-etal-2021-videoclip, wang2022internvideo}, achieving the state-of-the-art result in several video downstream tasks such as classification, video retrieval, and vision question answering.
+
+This research focuses on the long-tail issue and has demonstrated that the text encoder of pretrained CLIP is an efficient tool to overcome the scarcity problem of tail classes.
+
+
+\section{Temporal Redundancy}
+It is shown that boundaries of objects in frames or any small displacements between neighbouring frames are significant features for action recognition \parencite{10.1007/978-3-030-12939-2_20}. In order to enhance the model in this aspect, optical flow and pretext learning are two research directions. 
+
+\subsection{Optical Flow}
+In order to capture the tiny boundary changes between frames, it has been very popular to utilise the optical flow as an independent stream in the model structure to do the action recognition \parencite{Piergiovanni_2019_CVPR}. 
+
+Some studies suggested that optical flow may be replaced or improved due to the expensive computing resource used for optical flow calculation. They proposed other network to substitute the pretrained optical flow model by structure improvement that capturing the motion between frames, end-to-end classification network that also predict the optical flow map. However, It is although they were more advantageous in terms of the number of model parameters and computation speed, they suffered from inferior performance \parencite{Lee_2018_ECCV, 8354283, Piergiovanni_2019_CVPR}.
+
+\subsection{Pretext Learning}
+Some more recent studies focuses on designing different pretext tasks for the model to learn in a self-supervised way \parencite{wang2022internvideo}.
+
+Through careful design, pretext learning model will be able to produce high-quality visual representation in a specific semantic space, which can further be used in downstream tasks such as action recognition, video retrieval, or video captioning \parencite{10.1145/3577925}.
+
+% TODO: should I cite MoCo Again?
+Some studies train the model to predict the appearance statistics \parencite{Wang_2019_CVPR}, rotation angles \parencite{DBLP:journals/corr/abs-1811-11387}, playback speed \parencite{Yao_2020_CVPR, 10.1007/978-3-030-58520-4_30}, and temporal order \parencite{10.1007/978-3-030-58604-1_26}. Another way to design pretext task is to train a contrastive learning model to distinguish if two augmented images are from the same source or not. MoCo \parencite{finn2017model} and SimCLR \parencite{pmlr-v119-chen20j}, proposed to train on image data, are also introduced to video area \parencite{Feichtenhofer_2021_CVPR}.
+
+Inspired by SimCLR, Action Frame Contrastive Learning Network (AFRICAN) is proposed in this research to force the model to capture the fine-grained difference between frames in a video. In the training steps of AFRICAN, frames in a video are augmented into two different views to do the contrastive learning. The target of the contrastive learning model is to identify pairs of frames from the same frame source. This way, model is able to explorer weights that can capture the fine-grained difference between frames. 
+

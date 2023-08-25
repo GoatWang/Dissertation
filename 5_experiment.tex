@@ -1,7 +1,11 @@
+In this section, the effectiveness of CLIP with prompt engineering for the long-tail issue and AFRICAN for the temporal redundancy problem will be experimented.
+
 \section{CLIP with Prompt Engineering}
+Before entering the experiment on the long-tail issue, I first need to decide whether to use VideoCLIP or ImageCLIP for action recognition. Subsequently, I experimented with the effectiveness of CLIP on long-tail issue.
+
 \subsection{VideoCLIP or ImageCLIP?}
 \label{sec:imageclipbetter}
-Before entering the experiment on the long-tail issue, I first need to decide whether to use VideoCLIP or ImageCLIP for action recognition. To make this decision, I experiment with three model settings: 
+ To make this decision, I experiment with three model settings: 
 
 \begin{enumerate}
     \item VC\_Vision: VideoCLIP with vision layers learnable, as illustrated in Figure \ref{fig:modelstructure_vc} with a learnable video encoder.

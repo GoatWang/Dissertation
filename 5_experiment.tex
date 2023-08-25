@@ -9,7 +9,7 @@ Before entering the experiment on the long-tail issue, I first need to decide wh
     \item IC: Image CLIP trained on post-transformer layers, as illustrated in Figure \ref{fig:modelstructure_ic} with a frozen image encoder.
 \end{enumerate}
 
-For all three of these experiments, models are trained with a binary cross-entropy loss function and the adamw optimizer, using a learning rate of 0.00015 on a single A100 GPU. They are all trained for 70 epochs. Due to memory limitations, I use a batch size of 16 for the VC\_Vision model, but 128 for the VC\_Proj and IC models. Referring to Animal Kingdom settings \parencite{ng2022animal}, the evaluation metrics used for this task include mean Average Precision (mAP) on the overall, head, middle, and tail classes, as provided by the dataset. 
+For all three of these experiments, models are trained with a binary cross-entropy loss function and the adamw optimizer, using a learning rate of 0.00015 on a single A100 GPU. They are all trained for 80 epochs. Due to memory limitations, I use a batch size of 16 for the VC\_Vision model, but 128 for the VC\_Proj and IC models. Referring to Animal Kingdom settings \parencite{ng2022animal}, the evaluation metrics used for this task include mean Average Precision (mAP) on the overall, head, middle, and tail classes, as provided by the dataset. 
 
 % TODO
 %The effect of batch size for Video CLIP will be further discussed in Section \ref{sec:ablation_bs}.
@@ -27,12 +27,13 @@ The results of the three experiments are shown in Table \ref{tab:resultsbackbone
         {} & Overall & Head  & Middle & Tail \\
         \midrule
         CARe        & 30.55   & 63.33 & 38.62 & 25.09 \\
-        VC\_Vision  & 27.19   & 46.23 & 36.72 & 19.78 \\
-        VC\_Proj    & 49.86   & 59.31 & 54.13 & 45.80 \\
-        IC          & \textbf{54.79}   & \textbf{71.73} & \textbf{63.31} & \textbf{49.07} \\
+        VC\_Vision  & 27.20   & 46.24 & 37.25 & 20.00 \\
+        VC\_Proj    & 49.82   & 59.48 & 54.93 & 46.03 \\
+        IC          & \textbf{54.36} & \textbf{71.72} & \textbf{63.80} & \textbf{49.07} \\
         \bottomrule
     \end{tabular}
 \end{table}
+
 
 \begin{figure}[ht]
     \centering

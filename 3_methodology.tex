@@ -2,29 +2,31 @@
 \begin{figure}[ht]
     \centering
     \includegraphics[width=1.0\textwidth]{assets/imgs/3_1_ModelStructureVC}
-    \caption[CLIP Action Recognition Model Structure 1]{This Chart illustrates the model structure of applying Video CLIP and prompt engineering for action recognition.}
-    \label{fig:modelstructic1}
+    \caption[VideoCLIP model structure]{This chart illustrates VideoCLIP model structure.}
+    \label{fig:modelstructure_vc}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=1.0\textwidth]{assets/imgs/3_2_ModelStructureIC}
-    \caption[CLIP Action Recognition Model Structure 2]{This Chart illustrates the model structure of applying Image CLIP and prompt engineering for action recognition.}
-    \label{fig:modelstructic2}
+    \caption[ImageCLIP Model Structure]{This chart illustrates ImageCLIP model structure.}
+    \label{fig:modelstructure_ic}
 \end{figure}
 
-I designed two model structures for action recognition to test the performance of Image CLIP \parencite{radford2021learning} and the video clip module of InternVideo \parencite{wang2022internvideo}. Figure \ref{fig:modelstructic1} and \ref{fig:modelstructic2} illustrate the two model structures, which use CLIP and prompt engineering for action recognition. The models both take video and text prompts as input. The prompt template and its enbedding distribution are shown in Figure \ref{fig:1_1_ClassEmbeddingInternVideo}. 
+I have designed two model structures for action recognition to test the performance of CLIP pretrained on images, denoted as ImageCLIP, and CLIP pretrained on videos, denoted as VideoCLIP. In this context, I use the original CLIP \parencite{radford2021learning} as ImageCLIP and the clip module of InternVideo \parencite{wang2022internvideo} as VideoCLIP. 
+
+Figure \ref{fig:modelstructure_vc} and \ref{fig:modelstructure_ic} illustrate the two model structures, which utilise CLIP and prompt engineering for action recognition. Both models take video and text prompts as input. The prompt template and its embedding distribution are shown in Figure \ref{fig:1_1_ClassEmbeddingInternVideo}. 
 
 Before training begins, in order to accelerate the process, the class embeddings of size $(140, 768)$ are pre-calculated by a text encoder pretrained by InternVideo based on the prompt template, action name, and category. This is done since the text encoder is frozen, and the weights are not updated. 
 
-Figure \ref{fig:modelstructic1} uses the video encoder of the InternVideo's video clip module, which is Uniformer, as its visual encoder. In order to evaluate the structure fairly, I experimented with the two model settings on this structure: Video Clip train on all vision layers, and Video Clip train only on projection layers. Figure \ref{fig:modelstructic2} uses the image encoder of CLIP as its visual encoder. In order to encode the 8 frames into video embeddings, 8 image embeddings encoded by Image CLIP should be further passed through 12 layers post-transformer with a pooling layer to produce a 768-dimensional video embedding.
+Figure \ref{fig:modelstructure_vc} shows the model structure of VideoCLIP. In order to evaluate the structure fairly, I experimented with the two model settings on this structure: VideoCLIP training on all vision layers, and VideoCLIP training only on projection layers. Figure \ref{fig:modelstructure_ic} shows the model structure of ImageCLIP. In order to encode the 8 frames into video embeddings, 8 image embeddings encoded by the image encoder of ImageCLIP should be further passed through a 12-layer transformer followed by a pooling layer to produce a 768-dimensional video embedding.
 
-In contrast to multiclass classification, this is multilabel classification, meaning that a video may belong to more than one class. Therefore, I added a linear layer as a buffer to help the model fit better. Finally, the output logits of the linear layer are then passed through a sigmoid function to determine the probability of each class. 
+As this is a multilabel classification task, meaning that a video may belong to more than one class, I added a linear layer as a buffer to help the model fit better. Finally, the output logits of the linear layer are then passed through a sigmoid function to determine the probability of each class. 
 
 \section{AFRICAN}
-The whole AFRICAN consist of two stages: pretraining and action recognition. The pretraining stage is to train the model to distinguish whether two images are augmented from the same frame in a video or not. The action recognition stage utilises the pretrained model to extract more meaningful embedding for action recognition. 
+The whole AFRICAN consists of two stages: the pretraining stage and the action recognition stage. The pretraining stage is to train the model to distinguish whether two images are augmented from the same frame in a video or not. At the action recognition stage, the pretrained AFRICAN image encoder is applied to extract the embeddings for action recognition. 
 
-\subsection{AFRICAN Pretraining}
+\subsection{Pretraining Stage}
 
 \begin{figure}[ht]
     \centering
@@ -33,7 +35,7 @@ The whole AFRICAN consist of two stages: pretraining and action recognition. The
 f\label{fig:modelstructafsim}
 \end{figure}
 
-At the pretraining stage, AFRICAN apply contrastive learning techniques to distinguish whether two images are augmented from the same frame in a video or not. Figure \ref{fig:modelstructafsim} illustrates the batch operation of the model. The input for forwarding is a video sample $x_i$, where $i$ denotes the $i$-th sample in the dataset. $x_i$ is then copied twice into $x_{i1}$ and $x_{i2}$, which then independently pass through the same video augmentation function $aug(\cdot)$ with different random seeds, as shown in Equations \ref{eq:aug1} and \ref{eq:aug2}. 
+At the pretraining stage, AFRICAN applies contrastive learning techniques to distinguish whether two images are augmented from the same frame in a video or not. Figure \ref{fig:modelstructafsim} illustrates the batch operation of the model. The input for forwarding is a video sample $x_i$, where $i$ denotes the $i$-th sample in the dataset. $x_i$ is then copied twice into $x_{i1}$ and $x_{i2}$, which then independently pass through the same video augmentation function $aug(\cdot)$ with different random state, as shown in Equations \ref{eq:aug1} and \ref{eq:aug2}. 
 
 \begin{equation}
     \label{eq:aug1}
@@ -65,24 +67,20 @@ Afterwards, the similarity between the image embeddings is calculated by normali
 
 
 
-\subsection{AFRICAN for Action Recognition}
+\subsection{Action Recognition Stage}
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=1.0\textwidth]{assets/imgs/3_4_ModelStructureAF}
-    \caption[Operation of AFRICAN for action recognition]{This chart illustrates the operation of AFRICAN for action recognition.}
+    \caption[Operation of AFRICAN at the action recognition stage]{This chart illustrates the operation of AFRICAN at the action recognition stage.}
     \label{fig:modelstructaf_ar}
 \end{figure}
 
 % TODO: further discussion is in the ablation study
-Figure \ref{fig:modelstructaf_ar} illustrates the operation of AFRICAN for action recognition. The whole structure consists of two streams. The upper stream is the pretrained CLIP stream, the lower stream is the pretrained AFRICAN stream.
-In the pretrained CLIP stream, the visual encoder and class embedding are the same as the visual encoder and class embedding in Figure \ref{fig:modelstructic2}. Because the structure of Image CLIP is able to achieve better performance than video CLIP, I use the Image CLIP here as the visual encoder in the clip stream. 
+Figure \ref{fig:modelstructaf_ar} illustrates the operation of AFRICAN for action recognition. The whole structure consists of two streams. The upper stream is the pretrained CLIP stream, the lower stream is the pretrained AFRICAN stream. 
 
-In the pretrained AFRICAN stream, the structure of the visual encoder is the same as the pretrained CLIP stream but with pretrained AFRICAN weights. Since the AFRICAN is not pretrained by the visual-text multimodality model like CLIP, there is no corresponding class embedding. Therefore, a commonly used structure, multilayer perceptron (MLP), is used to do map the embedding and one-hot encoding. The 3-layer MLP takes the video embedding as input and outputs a 140-dimensional logits, which then pass through the sigmoid function to do the classification.
+In the pretrained CLIP stream, the visual encoder and class embedding are the same as those in ImageCLIP, as shown in Figure \ref{fig:modelstructure_ic}. Because the structure of ImageCLIP is able to achieve better performance than VideoCLIP, which will be discussed in Section \ref{sec:imageclipbetter}, I have chosen to use ImageCLIP here as the visual encoder in the pretrained CLIP stream. 
 
-After the logits, the input of the sigmoid function, are obtained in the two streams, they are separately used for prediction, which is used to compute the loss1 and loss2. At the same time, the logits of both streams will be multiplied by a 140-dimensional weights to determine the importance of each class for both streams, which is followed by an addition to produce the final prediction, which is used to compute the loss3. Finally, the loss1, loss2, and loss3 are added together to do the backpropagation. 
+In the pretrained AFRICAN stream, the structure of the visual encoder is the same as those in the pretrained CLIP stream but with AFRICAN pretrained weights. Since AFRICAN is not pretrained by the vision-text multimodal model like CLIP, there is no corresponding class embedding. Therefore, a commonly used structure, the multilayer perceptron (MLP), is employed to map the embedding and one-hot encoding. The 3-layer MLP takes the video embedding as input and outputs 140-dimensional logits, which are then passed through a sigmoid function for classification.
 
-
-
-
-
+After the logits, the input of the sigmoid function, are obtained in the two streams, they are used separately for prediction and computation of loss1 and loss2. Simultaneously, the logits of both streams are multiplied by W1 and W2, two 140-dimensional weights, respectively to determine the contributions of each class for both streams. This is followed by an addition to produce the final prediction and computation of loss3. Finally, loss1, loss2, and loss3 are added together to do the backpropagation. 

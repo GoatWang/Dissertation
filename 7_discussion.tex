@@ -1,0 +1,47 @@
+\section{Why Does Image Clip perform better than Video Clip?}
+\label{sec:ablation_vc}
+\subsection{Domain Adaption Gap}
+VideoCLIP is pretrained on the k400 dataset \parencite{kay2017kinetics}, which is a human action dataset, while ImageCLIP is pretrained on a combination of web-crawled and commonly used pre-existing image datasets. As suggested in \parencite{farahani2021brief}, the gap between the animal and human domains may lead to poor performance.
+
+\subsection{Need for More Learnable Weights}
+With the Animal Kingdom dataset containing more than 50 hours of animal video clips, it may require more trainable weights to achieve a better fit. To test the effect of different sizes of trainable weights, I experimented with the following two settings to add trainable weights:
+
+\begin{enumerate}
+    \item VC\_AT: The VC\_Proj model adds a 12-layer transformer, which is the same as the Image Clip settings in Figure \ref{fig:modelstructure_ic}. Rather than pooling all outputs of ViT's last layer, I pool the embedding of each patch in the same frame together to obtain the frame-based embedding, which is used as input for the 12-layer transformer.
+    \item VC\_DF: This setting is the same as the VC\_Proj model but with two more learnable layers. The Uniformer model, which is the structure used by VideoCLIP, enhances the cross-frame relationship on the final 4 layers of ViT. There are two mechanisms to achieve this, Deep Position Embedding (DPE), a series of 3D CNN layers, and Feed Forward Network (FFN), the attention mechanism on the cls token with two linear layers. These two layers are learnable in this setting.
+\end{enumerate}
+
+Table \ref{tab:ablation_vc} and Figure \ref{fig:ablation_vc} show the results of the models with different learnable weights and the performance on each epoch. As illustrated in the figure, it is clear that the VC\_AT model is able to improve the VC\_Proj model to get closer to IC, proving that more learnable weights are indeed helpful for better fitting. Taking advantage of the well-designed mechanism of Uniformer, the VC\_DF model is able to achieve a higher score (55.98 mAP) than the IC model (54.36) as demonstrated in the table. 
+
+\begin{table}[ht]
+    \centering
+    \caption{Training Results for Models with Different learnable Weights}
+    \label{tab:ablation_vc}
+    \begin{tabular}{lllll}
+        \toprule
+        \multirow{2}{*}{Models} & Accuracy \\
+        \cmidrule{2-2} 
+        {} &  Best Epoch \\
+        \midrule
+        VC\_Vision & 25.74 \\
+        VC\_Proj   & 48.56 \\
+        IC         & 54.36 \\
+        VC\_AT     & 52.79 \\
+        VC\_DF     & 55.98 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{figure}[ht]
+    \centering
+    \resizebox{1.0\textwidth}{!}{\input{"assets/imgs/7_1_AblationVC.pgf"}}
+    \caption[mAP performance on each epoch of VC\_Vision, VC\_Proj, IC, VC\_AT, VC\_DF on each epoch]{This chart illustrates the mAP performance of VC\_Vision, VC\_Proj, IC, VC\_AT, VC\_DF on each epoch.}
+    \label{fig:ablation_vc}
+\end{figure}
+
+% \subsection{The effect smaller of batch size}
+% Owing to the 80 Gb limitation of A100 GPU, I am able to train the fully learnable model, VC\_Vision, with a batch size of 16. To investigate the effect of this, I compare the 
+
+
+% 0.514509499	0.543613255	0.559846222	0.257423162	0.481209993
+% VC_AT	    IC	        VC_dd	    VC2_Vision	VC2_Proj

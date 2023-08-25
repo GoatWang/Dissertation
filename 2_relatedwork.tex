@@ -1,25 +1,24 @@
-
 \section{Long-Tail Issue}
-In previous research, the three main groups of techniques are employed to deal with the long-tail issue: Re-weighting, Re-sampling, and Few-Shot Learning.
+In previous research, three main groups of techniques have been employed to deal with the long-tail issue: Re-weighting, Re-sampling, and Few-Shot Learning.
 
 \subsection{Re-weighting}
-Re-weighting is a technique used to apply varying weights of penalty for specific groups of classes or samples. This is typically achieved by modifying the loss function. The most vanilla re-weighting scheme involves applying the inverse class frequency to the loss. In this manner, more frequent classes will receive a lower weight of loss, enabling the model to put more emphasis on the tail classes \parencite{khan2017cost, mostajabi2015feedforward}.
+Re-weighting is a technique used to apply varying weights of penalty to specific groups of classes or samples. This is typically achieved by modifying the loss function. The most vanilla re-weighting scheme involves applying the inverse class frequency to the loss. In this manner, more frequent classes receive a lower weight of loss, enabling the model to put more emphasis on the tail classes \parencite{khan2017cost, mostajabi2015feedforward}.
 
-However, it has been proved that as the number of samples increases, the marginal benefit of the model performance diminishes. As a result, directly applying the inverse class frequency to the loss function may excessively reduce the weight of losses for the frequent classes. Class Balanced Loss (CB Loss) has been proposed to resolve this issue. CB Loss calculates the effective number of samples to balance the inverse class frequency, yielding a more reasonable weight for the loss \parencite{cui2019class}.
+However, it has been proved that as the number of samples increases, the marginal benefit of model performance diminishes. As a result, directly applying the inverse class frequency to the loss function may excessively reduce the weight of losses for the frequent classes. Class Balanced Loss (CB Loss) has been proposed to resolve this issue. CB Loss calculates the effective number of samples to balance the inverse class frequency, yielding a more reasonable weight for the loss \parencite{cui2019class}.
 
 In contrast to frequency-based re-weighting, Focal Loss focuses on the level of learning difficulties. It scales the penalty to automatically down-weight the contribution of easy examples, which enforces the model to focus on the hard examples \parencite{lin2017focal}.
 
-Label-Distribution-Aware Margin (LDAM) Loss inspired by hinge loss in support vector machine. The design of LDAM ensures that the model must have a closer decision boundary when classifying frequent classes, meaning that the model must output a higher confidence probability to achieve a better score \parencite{cao2019learning}.
+Label-Distribution-Aware Margin (LDAM) Loss, inspired by hinge loss in support vector machine, ensures that the model has a closer decision boundary when classifying frequent classes. This means that the model must output a higher confidence probability to achieve a better score \parencite{cao2019learning}.
 
 % TODO: some connectivity should be added here
-In the context of videos, re-weighting may not be the best strategy to overcome long-tail issue. Considering the varying amounts of information in a single video, adjusting the weights to tail classes is likely to introduce noise into the training process \parencite{zhang2021videolt}. 
+In the context of videos, re-weighting may not be the best strategy to overcome the long-tail issue. Considering the varying amounts of information in a single video, adjusting the weights to tail classes is likely to introduce noise into the training process \parencite{zhang2021videolt}. 
 
 \subsection{Re-sampling}
 Re-sampling refers to the intuitive use of sampling algorithms to balance the number of samples for each class. Several early research studies have applied this technique to enhance the model performance \parencite{shen2016relay, 5128907, mahajan2018exploring}.
 
-Precious research has also found that data imbalance itself does not affect the performance of representation learning. Although re-sampling has led to better performance on the classification result, it actually benefits the classifier learning while harming the representation learning. Consequently, subsequent research has focused more on the re-sampling techniques used in classifier training \parencite{zhou2020bbn, kang2019decoupling}.
+Previous research has also found that data imbalance itself does not affect the performance of representation learning. Although re-sampling has led to better performance in classification results, it actually benefits classifier learning while harming representation learning. Consequently, subsequent research has focused more on re-sampling techniques used in classifier training \parencite{zhou2020bbn, kang2019decoupling}.
 
-Compared to the previous method that focused on the re-sampling algorithm, the following research has attempted to reconstruct more samples. VideoLT, for example, concatenates frames from different videos to generate more tail samples \parencite{zhang2021videolt}. Reconstruction of samples in the embedding space has also been explored \parencite{liu2022long, perrett2023use}.
+Compared to the previous method that focused on re-sampling algorithms, subsequent research has attempted to reconstruct more samples. VideoLT, for example, concatenates frames from different videos to generate more tail samples \parencite{zhang2021videolt}. Reconstruction of samples in the embedding space has also been explored \parencite{liu2022long, perrett2023use}.
 
 These re-sampling techniques certainly mitigate poor performance in the tail classes. Nevertheless, they do not guarantee the production of samples with the same variety and correctness as the collected data.
 
@@ -41,9 +40,9 @@ This research focuses on the long-tail issue and has demonstrated that the text 
 It is shown that boundaries of objects in frames or any small displacements between neighbouring frames are significant features for action recognition \parencite{10.1007/978-3-030-12939-2_20}. In order to enhance the model in this aspect, optical flow and pretext learning are two research directions. 
 
 \subsection{Optical Flow}
-In order to capture the tiny boundary changes between frames, it has been very popular to utilise the optical flow as an independent stream in the model structure to do the action recognition \parencite{Piergiovanni_2019_CVPR}. 
+In order to capture the tiny boundary changes between frames, it has been popular to utilise the optical flow as an independent stream in the model structure for action recognition \parencite{Piergiovanni_2019_CVPR}. 
 
-Some studies suggested that optical flow may be replaced or improved due to the expensive computing resources used for optical flow calculation. They proposed another network to substitute the pretrained optical flow model by structure improvement that captures the motion between frames, an end-to-end classification network that also predicts the optical flow map. However, It is although they were more advantageous in terms of the number of model parameters and computation speed, they suffered from inferior performance \parencite{Lee_2018_ECCV, 8354283, Piergiovanni_2019_CVPR}.
+Some studies have suggested that optical flow may be replaced or improved due to the expensive computing resources used for its calculation. They proposed another network to substitute the pretrained optical flow model with structural improvements that capture motion between frames, an end-to-end classification network that also predicts the optical flow map. However, although they were more advantageous in terms of the number of model parameters and computation speed, they suffered from inferior performance \parencite{Lee_2018_ECCV, 8354283, Piergiovanni_2019_CVPR}.
 
 \subsection{Pretext Learning}
 Some more recent studies focus on designing different pretext tasks for the model to learn in a self-supervised way \parencite{wang2022internvideo}.

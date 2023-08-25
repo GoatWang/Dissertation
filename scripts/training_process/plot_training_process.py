@@ -39,11 +39,11 @@ def plot_progress(df, n_rows, title, xaxis, yaxis, xlabel, ylabel, legend=True, 
 
 if __name__ == "__main__":
     from pathlib import Path
-    df = pd.read_csv("data/5_1_1_backbone_overall.csv")
-    save_dir = os.path.join(os.path.dirname(__file__), "output", "training_progress")
-    Path(save_dir).mkdir(exist_ok=True, parents=True)
-    fig_fp = os.path.join(save_dir, "BackboneSelection.png")
-    plot_progress(df, n_rows=80, title=None, xaxis='epoch', yaxis=['VC_Vision', 'VC_Proj', 'IC'], xlabel='Epoch', ylabel='mAP', fig_fp=fig_fp)
+    # df = pd.read_csv("data/5_1_1_backbone_overall.csv")
+    # save_dir = os.path.join(os.path.dirname(__file__), "output", "training_progress")
+    # Path(save_dir).mkdir(exist_ok=True, parents=True)
+    # fig_fp = os.path.join(save_dir, "BackboneSelection.png")
+    # plot_progress(df, n_rows=80, title=None, xaxis='epoch', yaxis=['VC_Vision', 'VC_Proj', 'IC'], xlabel='Epoch', ylabel='mAP', fig_fp=fig_fp)
 
     # df = pd.read_csv("data/AblationVC.csv")
     # save_dir = os.path.join(os.path.dirname(__file__), "output", "training_progress")
@@ -57,7 +57,11 @@ if __name__ == "__main__":
     # fig_fp = os.path.join(save_dir, "AFRICANPretraining.png")
     # plot_progress(df, n_rows=50, title=None, xaxis='epoch', yaxis=["Accuracy"], xlabel='Epoch', ylabel='Accuracy', legend=False, fig_fp=fig_fp)
 
-
+    df = pd.read_csv("data/VCBatchSize.csv")
+    save_dir = os.path.join(os.path.dirname(__file__), "output", "training_progress")
+    Path(save_dir).mkdir(exist_ok=True, parents=True)
+    fig_fp = os.path.join(save_dir, "7_1_VCBatchSize.png")
+    plot_progress(df, n_rows=40, title=None, xaxis='epoch', yaxis=['VC_AT_bs16', 'VC_AT_bs128'], xlabel='Epoch', ylabel='mAP', fig_fp=fig_fp)
 
 
 # BackboneSelection

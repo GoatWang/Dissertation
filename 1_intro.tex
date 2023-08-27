@@ -11,9 +11,9 @@ common actions are frequently observed, rare actions may be seen with very low p
 % TODO: adjust the size of the text in the figure
 \begin{figure}[ht]
     \centering
-    % \includegraphics[width=1\textwidth]{assets/imgs/1_1_ClassEmbeddingInternVideo}
+    % \includegraphics[width=1\textwidth]{assets/charts/1_1_ClassEmbeddingInternVideo}
     \adjustbox{trim=6.2cm 2cm 5cm 2cm}{%
-        \resizebox{1.2\textwidth}{!}{\input{"assets/imgs/1_1_ClassEmbeddingInternVideo.pgf"}}
+        \resizebox{1.2\textwidth}{!}{\input{"assets/charts/1_1_ClassEmbeddingInternVideo.pgf"}}
     }
     \caption[Class Embedding Distribution]{This figure shows the distribution of class embeddings. The 140 action classes are converted into sentences using the prompt template "A video of an animal <action>. This action is a kind of <category of action> behaviour.", which is then encoded into embedding by the text encoding module of InternVideo \parencite{wang2022internvideo}. By applying Principle Component Analysis to reduce the dimension, the embeddings can be plotted in the 2D plane. Green labels represent the head classes; blue labels represent the middle classes; red labels represent the tail classes.}
     \label{fig:1_1_ClassEmbeddingInternVideo}
@@ -32,7 +32,7 @@ The second challenge is the temporal redundancy. Many animal actions exhibit slo
 % TODO: change name to Prompt Embedding
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=1\textwidth]{assets/imgs/1_2_FrameComparison}
+    \includegraphics[width=1\textwidth]{assets/charts/1_2_FrameComparison}
     \caption[Temporal Redundancy]{This figure illustrates the high temporal redundancy between neighbouring frames in animal videos. Each row of the figure shows sampled frames from the same video.}
     \label{fig:1_2_FrameComparison}
 \end{figure}

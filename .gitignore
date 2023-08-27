@@ -281,5 +281,6 @@ TSWLatexianTemp*
 *-answers.tex
 
 
-!assets/imgs/*.pdf
+!assets/charts/*.pdf
+!assets/charts_rw/*.pdf
 scripts/training_process/output

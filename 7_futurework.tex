@@ -1,9 +1,21 @@
 \section{CLIP with Prompt Engineering}
-\subsection{the impact of Batch Size should be further explored}
+\subsection{Impact of Batch Size on Long-Tail Dataset}
+There are very few studies that focus on the impact of batch size on long-tail datasets. Some of my experiments suggest that the learning curves of models with different batch sizes perform differently. In the range of batch sizes from 8 to 128, large batch sizes may lead to better performance. For example, Figure \ref{fig:futurework_bs} shows the VC\_AT with batch sizes of 16 and 128, denoted as VC\_AT\_bs16 and VC\_AT\_bs128. VC\_AT\_bs16 increases rapidly but reaches a lower ceiling, while VC\_AT\_bs128 may perform better in the end.
 
+\begin{figure}[ht]
+    \centering
+    \resizebox{1.0\textwidth}{!}{\input{"assets/imgs/7_1_VCBatchSize.pgf"}}
+    \caption[mAP of VC\_AT\_bs16 and VC\_AT\_bs128 on each Epoch]{This chart illustrates the mAP of VC\_Vision, VC\_Proj, IC, VC\_AT, VC\_DF on each epoch.}
+    \label{fig:futurework_bs}
+\end{figure}
+
+\subsection{Percentage of Learnable Weights on Medium-Size Dataset}
+Transfer learning is a popular technique for achieving better results without large amounts of data. However, most research focuses on one-shot or few-shot learning problems, with few studies exploring medium-size datasets, especially those with domain adaptation gaps. Exploring this topic may provide insights for future research into tuning learnable layers when applying transfer learning.
 
 \section{AFRICAN}
-% \section{the impact of larger Batch Size for Contrastive learning}
-% \section{(domain adaption: the relationship between the size of data and number percentage of trainable weights can be further explored}
-% \section{the more advanced image encoder such as FlowFormer (transformer for optical flow) can be explored to be backbone of AFRICAN}
-% \section{A more advanced method more showing the fine-grained attention map can be further explored. (not rough one)}
+\subsection{Larger Batch Size for Contrastive learning}
+As suggested by SimCLR \parencite{pmlr-v119-chen20j}, "Contrastive learning benefits from larger batch sizes and longer training compared to its supervised counterpart." In this research, AFRICAN is trained in the pretraining stage with a batch size of 8, which could be further optimized to achieve a better result.
+
+\subsection{Exploration of More Advanced Image Encoders}
+In this research, CLIP is utilized as the visual encoder of AFRICAN. However, more advanced models, such as FlowFormer \parencite{huang2022flowformer}, have been proposed to generate high-quality optical flow maps using transformers. As suggested in \parencite{sevilla2019integration}, "Training optical flow to minimize classification error instead of EPE improves action recognition results." Therefore, integrating these techniques to design a more boundary-focused model for action recognition may lead to improved performance.
+

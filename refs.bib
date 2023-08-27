@@ -5,7 +5,6 @@
 	date-modified = {2023-08-20 11:08:11 +0100},
 	doi = {10.1186/s13750-019-0164-4},
 	id = {Greggor2019},
-	isbn = {2047-2382},
 	journal = {Environmental Evidence},
 	number = {1},
 	pages = {23},
@@ -426,7 +425,6 @@ year={2018}
     abstract = "We present VideoCLIP, a contrastive approach to pre-train a unified model for zero-shot video and text understanding, without using any labels on downstream tasks. VideoCLIP trains a transformer for video and text by contrasting temporally overlapping positive video-text pairs with hard negatives from nearest neighbor retrieval. Our experiments on a diverse series of downstream tasks, including sequence-level text-video retrieval, VideoQA, token-level action localization, and action segmentation reveal state-of-the-art performance, surpassing prior work, and in some cases even outperforming supervised approaches. Code is made available at https://github.com/pytorch/fairseq/examples/MMPT.",
 }
 
-
 @inproceedings{10.1007/978-3-030-12939-2_20,
 	abstract = {Most of the top performing action recognition methods use optical flow as a ``black box'' input. Here we take a deeper look at the combination of flow and action recognition, and investigate why optical flow is helpful, what makes a flow method good for action recognition, and how we can make it better. In particular, we investigate the impact of different flow algorithms and input transformations to better understand how these affect a state-of-the-art action recognition method. Furthermore, we fine tune two neural-network flow methods end-to-end on the most widely used action recognition dataset (UCF101). Based on these experiments, we make the following five observations: (1) optical flow is useful for action recognition because it is invariant to appearance, (2) optical flow methods are optimized to minimize end-point-error (EPE), but the EPE of current methods is not well correlated with action recognition performance, (3) for the flow methods tested, accuracy at boundaries and at small displacements is most correlated with action recognition performance, (4) training optical flow to minimize classification error instead of minimizing EPE improves recognition performance, and (5) optical flow learned for the task of action recognition differs from traditional optical flow especially inside the human body and at the boundary of the body. These observations may encourage optical flow researchers to look beyond EPE as a goal and guide action recognition researchers to seek better motion cues, leading to a tighter integration of the optical flow and action recognition communities.},
 	address = {Cham},
@@ -446,6 +444,15 @@ year={2018}
 	booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
 	month = {June},
 	year = {2019}
+}
+
+@inproceedings{sevilla2019integration,
+  title={On the integration of optical flow and action recognition},
+  author={Sevilla-Lara, Laura and Liao, Yiyi and G{\"u}ney, Fatma and Jampani, Varun and Geiger, Andreas and Black, Michael J},
+  booktitle={Pattern Recognition: 40th German Conference, GCPR 2018, Stuttgart, Germany, October 9-12, 2018, Proceedings 40},
+  pages={281--297},
+  year={2019},
+  organization={Springer}
 }
 
 @InProceedings{Lee_2018_ECCV,
@@ -594,4 +601,13 @@ year={2018}
   pages={877--894},
   year={2021},
   publisher={Springer}
+}
+
+@inproceedings{huang2022flowformer,
+  title={Flowformer: A transformer architecture for optical flow},
+  author={Huang, Zhaoyang and Shi, Xiaoyu and Zhang, Chao and Wang, Qiang and Cheung, Ka Chun and Qin, Hongwei and Dai, Jifeng and Li, Hongsheng},
+  booktitle={European Conference on Computer Vision},
+  pages={668--685},
+  year={2022},
+  organization={Springer}
 }

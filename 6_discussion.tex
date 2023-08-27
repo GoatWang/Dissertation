@@ -1,13 +1,13 @@
 \section{Why Does Image Clip perform better than Video Clip?}
 \label{sec:ablation_vc}
-\subsection{Domain Adaption Gap}
+\subsection{Domain Adaptation Gap}
 VideoCLIP is pretrained on the k400 dataset \parencite{kay2017kinetics}, which is a human action dataset, while ImageCLIP is pretrained on a combination of web-crawled and commonly used pre-existing image datasets. As suggested in \parencite{farahani2021brief}, the gap between the animal and human domains may lead to poor performance.
 
 \subsection{Need for More Learnable Weights}
-With the Animal Kingdom dataset containing more than 50 hours of animal video clips, it may require more trainable weights to achieve a better fit. To test the effect of different sizes of trainable weights, I experimented with the following two settings to add trainable weights:
+With the Animal Kingdom dataset containing more than 50 hours of animal video clips, it may require more trainable weights to achieve a better fit. To test the effect of different sizes of trainable weights, the following two settings are experimented with to add trainable weights:
 
 \begin{enumerate}
-    \item VC\_AT: The VC\_Proj model adds a 12-layer transformer, which is the same as the Image Clip settings in Figure \ref{fig:modelstructure_ic}. Rather than pooling all outputs of ViT's last layer, I pool the embedding of each patch in the same frame together to obtain the frame-based embedding, which is used as input for the 12-layer transformer.
+    \item VC\_AT: The VC\_Proj model adds a 12-layer transformer, which is the same as the Image Clip settings in Figure \ref{fig:modelstructure_ic}. Rather than pooling all outputs of ViT's last layer, the embeddings of patches in the same frame are pooled together to obtain the frame-based embedding, which is used as input for the 12-layer transformer.
     \item VC\_DF: This setting is the same as the VC\_Proj model but with two more learnable layers. The Uniformer model, which is the structure used by VideoCLIP, enhances the cross-frame relationship on the final 4 layers of ViT. There are two mechanisms to achieve this, Deep Position Embedding (DPE), a series of 3D CNN layers, and Feed Forward Network (FFN), the attention mechanism on the cls token with two linear layers. These two layers are learnable in this setting.
 \end{enumerate}
 
@@ -35,7 +35,7 @@ Table \ref{tab:ablation_vc} and Figure \ref{fig:ablation_vc} show the results of
 \begin{figure}[ht]
     \centering
     \resizebox{1.0\textwidth}{!}{\input{"assets/imgs/6_1_AblationVC.pgf"}}
-    \caption[mAP performance on each epoch of VC\_Vision, VC\_Proj, IC, VC\_AT, VC\_DF on each epoch]{This chart illustrates the mAP performance of VC\_Vision, VC\_Proj, IC, VC\_AT, VC\_DF on each epoch.}
+    \caption[mAP of VC\_Vision, VC\_Proj, IC, VC\_AT, VC\_DF on each Epoch]{This chart illustrates the mAP of VC\_Vision, VC\_Proj, IC, VC\_AT, VC\_DF on each epoch.}
     \label{fig:ablation_vc}
 \end{figure}
 

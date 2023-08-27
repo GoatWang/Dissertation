@@ -108,16 +108,29 @@
 
 %% Bibliography options 
 
+% \RequirePackage[
+%   backend=biber,
+%   doi=true,
+%   backref=true,
+%   sortcites=true,
+%   style={\the\@uobbiblio},
+%   maxnames=1000,
+%   mincrossrefs=99,
+%   sorting=nyt,
+%   sortcites
+% ]{biblatex}
+
+% Bibliography options
 \RequirePackage[
   backend=biber,
   doi=true,
   backref=true,
   sortcites=true,
-  style={\the\@uobbiblio},
+  citestyle=numeric-comp,
+  bibstyle=ieee,
   maxnames=1000,
   mincrossrefs=99,
   sorting=nyt,
-  sortcites
 ]{biblatex}
 
 % this is necessary to use ACM references in a non-ACM class

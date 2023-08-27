@@ -1,6 +1,7 @@
 In this section, CLIP with prompt engineering for animal action recognition has been explored to solve the long-tail issue, while AFRICAN has been proposed to deal with temporal redundancy. 
 
 \section{CLIP with Prompt Engineering}
+
 \begin{figure}[ht]
     \centering
     \includegraphics[width=1.0\textwidth]{assets/imgs/3_1_ModelStructureVC}
@@ -15,15 +16,20 @@ In this section, CLIP with prompt engineering for animal action recognition has 
     \label{fig:modelstructure_ic}
 \end{figure}
 
-I have designed two model structures for action recognition to test the performance of CLIP pretrained on images, denoted as ImageCLIP, and CLIP pretrained on videos, denoted as VideoCLIP. In this context, I use the original CLIP \parencite{radford2021learning} as ImageCLIP and the clip module of InternVideo \parencite{wang2022internvideo} as VideoCLIP. 
+Two model structures are employed for testing the performance of action recognition: 
+\begin{enumerate}
+    \item VideoCLIP: CLIP pretrained on videos, the clip module of InternVideo \parencite{wang2022internvideo} is used here. The whole structure is illustrated in Figure \ref{fig:modelstructure_vc}.
+    \item ImageCLIP: CLIP pretrained on images, the original CLIP \parencite{radford2021learning} is used here. The whole model structure is illustrated in Figure \ref{fig:modelstructure_ic}.
+\end{enumerate}
 
-Figure \ref{fig:modelstructure_vc} and \ref{fig:modelstructure_ic} illustrate the two model structures, which utilise CLIP and prompt engineering for action recognition. Both models take video and text prompts as input. The prompt template and its embedding distribution are shown in Figure \ref{fig:1_1_ClassEmbeddingInternVideo}. 
+Both models utilise CLIP and prompt engineering for action recognition, taking videos and text prompts as input. The prompt template "A video of an animal
+<action>. This action is a kind of <category of action> behaviour." is employed to generate the prompt for producing class embeddings. As shown in Figure \ref{fig:1_1_ClassEmbeddingInternVideo}, this method can produce meaningful distributed class embeddings.
 
 Before training begins, in order to accelerate the process, the class embeddings of size $(140, 768)$ are pre-calculated by a text encoder pretrained by InternVideo based on the prompt template, action name, and category. This is done since the text encoder is frozen, and the weights are not updated. 
 
-Figure \ref{fig:modelstructure_vc} shows the model structure of VideoCLIP. In order to evaluate the structure fairly, I experimented with the two model settings on this structure: VideoCLIP training on all vision layers, and VideoCLIP training only on projection layers. Figure \ref{fig:modelstructure_ic} shows the model structure of ImageCLIP. In order to encode the 8 frames into video embeddings, 8 image embeddings encoded by the image encoder of ImageCLIP should be further passed through a 12-layer transformer followed by a pooling layer to produce a 768-dimensional video embedding.
+Figure \ref{fig:modelstructure_vc} shows the model structure of VideoCLIP. In order to evaluate the structure fairly, two model settings are experimented with on this structure: VideoCLIP training on all vision layers, and VideoCLIP training only on projection layers. Figure \ref{fig:modelstructure_ic} shows the model structure of ImageCLIP. In order to encode the 8 frames into video embeddings, 8 image embeddings encoded by the image encoder of ImageCLIP should be further passed through a 12-layer transformer followed by a pooling layer to produce a 768-dimensional video embedding.
 
-As this is a multilabel classification task, meaning that a video may belong to more than one class, I added a linear layer as a buffer to help the model fit better. Finally, the output logits of the linear layer are then passed through a sigmoid function to determine the probability of each class. 
+As this is a multilabel classification task, meaning that a video may belong to more than one class, a linear layer is added as a buffer to help the model fit better. Finally, the output logits of the linear layer are then passed through a sigmoid function to determine the probability of each class. 
 
 \section{AFRICAN}
 The whole AFRICAN consists of two stages: the pretraining stage and the action recognition stage. The pretraining stage is to train the model to distinguish whether two images are augmented from the same frame in a video or not. At the action recognition stage, the pretrained AFRICAN image encoder is applied to extract the embeddings for action recognition. 
@@ -33,7 +39,7 @@ The whole AFRICAN consists of two stages: the pretraining stage and the action r
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.6\textwidth]{assets/imgs/3_3_ConstrastiveSimilarityMatrix}
-    \caption[Operation of AFRICAN pretraining]{This chart illustrates the operation of AFRICAN pretraining.}
+    \caption[Operation of pretraining AFRICAN]{This chart illustrates the operation of pretraining AFRICAN.}
 f\label{fig:modelstructafsim}
 \end{figure}
 
@@ -74,14 +80,14 @@ Afterwards, the similarity between the image embeddings is calculated by normali
 \begin{figure}[ht]
     \centering
     \includegraphics[width=1.0\textwidth]{assets/imgs/3_4_ModelStructureAF}
-    \caption[Operation of AFRICAN at the action recognition stage]{This chart illustrates the operation of AFRICAN at the action recognition stage.}
+    \caption[Operation of AFRICAN for action recognition]{This chart illustrates the operation of AFRICAN for action recognition.}
     \label{fig:modelstructaf_ar}
 \end{figure}
 
 % TODO: further discussion is in the ablation study
 Figure \ref{fig:modelstructaf_ar} illustrates the operation of AFRICAN for action recognition. The whole structure consists of two streams. The upper stream is the pretrained CLIP stream, the lower stream is the pretrained AFRICAN stream. 
 
-In the pretrained CLIP stream, the visual encoder and class embedding are the same as those in ImageCLIP, as shown in Figure \ref{fig:modelstructure_ic}. Because the structure of ImageCLIP is able to achieve better performance than VideoCLIP, which will be discussed in Section \ref{sec:imageclipbetter}, I have chosen to use ImageCLIP here as the visual encoder in the pretrained CLIP stream. 
+In the pretrained CLIP stream, the visual encoder and class embedding are the same as those in ImageCLIP, as shown in Figure \ref{fig:modelstructure_ic}. Because the structure of ImageCLIP is able to achieve better performance than VideoCLIP, which will be discussed in Section \ref{sec:imageclipbetter}, ImageCLIP is employed here as the visual encoder in the pretrained CLIP stream. 
 
 In the pretrained AFRICAN stream, the structure of the visual encoder is the same as those in the pretrained CLIP stream but with AFRICAN pretrained weights. Since AFRICAN is not pretrained by the vision-text multimodal model like CLIP, there is no corresponding class embedding. Therefore, a commonly used structure, the multilayer perceptron (MLP), is employed to map the embedding and one-hot encoding. The 3-layer MLP takes the video embedding as input and outputs 140-dimensional logits, which are then passed through a sigmoid function for classification.
 

@@ -23,7 +23,7 @@ Two model structures are employed for testing the performance of action recognit
 \end{enumerate}
 
 Both models utilise CLIP and prompt engineering for action recognition, taking videos and text prompts as input. The prompt template "A video of an animal
-<action>. This action is a kind of <category of action> behaviour." is employed to generate the prompt for producing class embeddings. As shown in Figure \ref{fig:1_1_ClassEmbeddingInternVideo}, this method can produce meaningful distributed class embeddings.
+<action>. This action is a kind of <category of action> behaviour." is employed to generate the prompt for producing class embeddings. As shown in Figure \ref{fig:1_2_ClassEmbeddingInternVideo}, this method can produce meaningful distributed class embeddings.
 
 Before training begins, in order to accelerate the process, the class embeddings of size $(140, 768)$ are pre-calculated by a text encoder pretrained by InternVideo based on the prompt template, action name, and category. This is done since the text encoder is frozen, and the weights are not updated. 
 

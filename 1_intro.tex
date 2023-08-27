@@ -1,49 +1,56 @@
 \section{Motivations}
 The analysis of animal behaviour is essential for wildlife conservation and management \parencite{Greggor2019, singh2020animal}. Researchers often utilize video cameras for action recognition to conduct long-term and consistent animal behaviour analysis. This technology enables a better understanding of animal populations and ecosystems, health and needs, movement-related injuries, and behaviour changes \parencite{ng2022animal, Giersberg:2022aa, 8259762}.
 
-Due to the varying temporal scales across different animal actions, video footage allows continuous monitoring of multiple animals at different time scales \parencite{ANDERSON201418}. However, recognizing animal actions presents unique challenges as the videos are usually collected in the wild, capturing a wide variety of actions performed by different animal species with varying sizes, textures, shapes, and motion speeds. Unfortunately, the majority of research has focused on human action recognition, leaving animal action recognition relatively understudied \parencite{mondal2023msqnet}.
+Due to the varying temporal scales across different animal actions, video footage allows continuous monitoring of multiple animals at different time scales \parencite{ANDERSON201418}. However, recognizing animal actions presents unique challenges as the videos are usually collected in the wild, capturing a wide variety of actions performed by different animal species with varying sizes, textures, shapes, and motion speeds. Nevertheless, the majority of research has focused on human action recognition, leaving animal action recognition relatively understudied \parencite{mondal2023msqnet}.
+
+Fortunately, the Animal Kingdom dataset \parencite{ng2022animal} was proposed in Computer Vision and Pattern Recognition Conference (CVPR) 2022, which contains 50 hours of video clips with up to 850 unique species and 140 fine-grained classes of actions for action recognition. This provides the possibility to improve the animal action recognition methodologies in a more scientific and efficient way. The dataset is used for the model training and evaluation in this research.
 
 \section{Challenges}
 \subsection{Long-Tail Issue}
 The first challenge in animal action recognition is the long-tail issue. Since animal behaviour footage is typically collected in the wild, animal action datasets may contain imbalanced data for different actions, reflecting their natural distribution. While 
 common actions are frequently observed, rare actions may be seen with very low probability, making their collection costly and leading to insufficient samples \parencite{ng2022animal, perrett2023use}. Since Deep learning models learn directly from data, the long tail issue has been a huge challenge for network training, which leads to poor performance on less frequent classes \parencite{cao2019learning, zhang2021videolt}.
 
-% TODO: adjust the size of the text in the figure
+Figure \ref{fig:1_1_LongTail} illustrates the long-tail features in the Animal Kingdom dataset. It is obvious that the dataset is highly imbalanced. The frequent classes account for 80\% of the dataset, while the less frequent and rare classes only account for less than 20\% of the dataset.
+
 \begin{figure}[ht]
     \centering
-    % \includegraphics[width=1\textwidth]{assets/charts/1_1_ClassEmbeddingInternVideo}
-    \adjustbox{trim=6.2cm 2cm 5cm 2cm}{%
-        \resizebox{1.2\textwidth}{!}{\input{"assets/charts/1_1_ClassEmbeddingInternVideo.pgf"}}
-    }
-    \caption[Class Embedding Distribution]{This figure shows the distribution of class embeddings. The 140 action classes are converted into sentences using the prompt template "A video of an animal <action>. This action is a kind of <category of action> behaviour.", which is then encoded into embedding by the text encoding module of InternVideo \parencite{wang2022internvideo}. By applying Principle Component Analysis to reduce the dimension, the embeddings can be plotted in the 2D plane. Green labels represent the head classes; blue labels represent the middle classes; red labels represent the tail classes.}
-    \label{fig:1_1_ClassEmbeddingInternVideo}
+    % \includegraphics[width=1.0\textwidth]{assets/charts/1_1_LongTail}
+    \resizebox{1.0\textwidth}{!}{\input{"assets/charts/1_1_LongTail.pgf"}}
+    \caption[Action Classes Frequency Distribution]{This Chart shows the long-tail distribution of action class frequency. On the graph, the X-axis represents the action index, and the y-axis displays the action count. The action classes in green colour are frequent classes, while the action classes in blue and red colour are less frequent or rare classes.}
+    \label{fig:1_1_LongTail}
 \end{figure}
 
-It has been proved that the distance of text embeddings strongly correlates with semantic similarity, even allowing for meaningful arithmetic calculations \parencite{mikolov2013efficient}. As Figure \ref{fig:1_1_ClassEmbeddingInternVideo} shows, applying the principle component analysis on the text embedding generated by the InternVideo's \parencite{wang2022internvideo} video clip module reveals relationships between classes. For example, the movement actions such as walking, running, flying, and landing are clustered at the right-bottom of the figure, while the birth-related actions such as giving birth, laying eggs, hatching and undergoing chrysalis, are gathered at the top of the figure. 
+\begin{figure}[ht]
+    \centering
+    % \includegraphics[width=1\textwidth]{assets/charts/1_2_ClassEmbeddingInternVideo}
+    \adjustbox{trim=6.2cm 2cm 5cm 2cm}{%
+        \resizebox{1.2\textwidth}{!}{\input{"assets/charts/1_2_ClassEmbeddingInternVideo.pgf"}}
+    }
+    \caption[Class Embedding Distribution]{This figure shows the distribution of class embeddings. The 140 action classes are converted into sentences using the prompt template "A video of an animal <action>. This action is a kind of <category of action> behaviour.", which is then encoded into embedding by the text encoding module of InternVideo \parencite{wang2022internvideo}. By applying Principle Component Analysis to reduce the dimension, the embeddings can be plotted in the 2D plane. Green labels represent the head classes; blue labels represent the middle classes; red labels represent the tail classes.}
+    \label{fig:1_2_ClassEmbeddingInternVideo}
+\end{figure}
+
+It has been proved that the distance of text embeddings strongly correlates with semantic similarity, even allowing for meaningful arithmetic calculations \parencite{mikolov2013efficient}. As Figure \ref{fig:1_2_ClassEmbeddingInternVideo} shows, applying the principle component analysis on the text embedding generated by the InternVideo's \parencite{wang2022internvideo} video clip module reveals relationships between classes. For example, the movement actions such as walking, running, flying, and landing are clustered at the right-bottom of the figure, while the birth-related actions such as giving birth, laying eggs, hatching and undergoing chrysalis, are gathered at the top of the figure. 
 
 By encoding text and visual data into the same semantic space, I am able to transfer the learning target of the model from one-hot encoding to a class embedding in the semantic space \parencite{ma2022x}, which might mitigate the unbalanced distribution caused by the long-tail issue. 
 
 
 \subsection{Temporal Redundancy}
-The second challenge is the temporal redundancy. Many animal actions exhibit slow or subtle motions, and high temporal redundancy may confuse the recognition model \parencite{YUAN2018221, li2022uniformer}. Figure \ref{fig:1_2_FrameComparison} illustrates this redundancy. 
+The second challenge is the temporal redundancy. Many animal actions exhibit slow or subtle motions, and high temporal redundancy may confuse the recognition model \parencite{YUAN2018221, li2022uniformer}. Figure \ref{fig:1_3_FrameComparison} illustrates this redundancy. 
 
 
-% TODO: change the figure, add caption
-% TODO: change name to Prompt Embedding
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=1\textwidth]{assets/charts/1_2_FrameComparison}
+    \includegraphics[width=1\textwidth]{assets/charts/1_3_FrameComparison}
     \caption[Temporal Redundancy]{This figure illustrates the high temporal redundancy between neighbouring frames in animal videos. Each row of the figure shows sampled frames from the same video.}
-    \label{fig:1_2_FrameComparison}
+    \label{fig:1_3_FrameComparison}
 \end{figure}
 
 To enhance the ability to capture fine-grained texture differences across neighbouring frames, Action Frame Contrastive Learning Network (AFRICAN) is proposed in this research, functioning as a counterpart to CLIP focusing more on semantic meaning. It forces the model to extract fine-grained feature differences between similar frames in the same video. 
 
-% TODO (Backbone): the improved score may be changed 
+% TODO: may be updated after picking the epoch for score table
 \section{Contributions}
-In this research, my contributions are twofold. First, CLIP model is demonstrated to be able to effectively address the long-tail issue in animal action recognition. Second, the AFRICAN network can serve as an auxiliary enhancer, aiding the model in understanding the temporal dimension of animal actions.
-
-% May not be written here: improving the overall mAP from 40.92\% using one-hot encoding to 54.76\% using prompt embedding. 
+In this research, my contributions are twofold. First, CLIP model is demonstrated to be able to effectively address the long-tail issue in animal action recognition, improving 21.9\% and 20.7\% mAP on middle and tail classes, while improving only 6.2\% mAP on head classes. Second, the AFRICAN network can serve as an auxiliary enhancer, aiding the model in understanding the temporal dimension of animal actions, improving the around 1\% mAP to achieve 55.08\% mAP.
 
 
 

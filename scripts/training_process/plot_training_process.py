@@ -22,8 +22,8 @@ def plot_progress(df, n_rows, title, xaxis, yaxis, xlabel, ylabel, legend=True, 
     if title is not None:
         plt.title(title, size=14)
 
-    plt.xlabel(xlabel, size=14)
-    plt.ylabel(ylabel, size=14)
+    plt.xlabel(xlabel, size=16)
+    plt.ylabel(ylabel, size=16)
     plt.grid(True)
     if legend:
         plt.legend(loc="lower right")
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     for segment in ['0_overall', '1_head', '2_middle', '3_tail']:
         df = pd.read_csv("data/4_4_finalscore_" + segment + ".csv")
         fig_fp = os.path.join(save_dir, "4_4_finalscore_" + segment + ".png")
-        plot_progress(df, n_rows=40, title=None, xaxis='epoch', yaxis=['IC', 'AFRICAN-AR'], xlabel='Epoch', ylabel='mAP', fig_fp=fig_fp, figsize=(5, 3))
+        plot_progress(df, n_rows=40, title=None, xaxis='epoch', yaxis=['IC', 'AFRICAN-AR'], xlabel='Epoch', ylabel='mAP', fig_fp=fig_fp, figsize=(6, 4))
 
     # df = pd.read_csv("data/AFRICANPretraining.csv")
     # fig_fp = os.path.join(save_dir, "AFRICANPretraining.png")

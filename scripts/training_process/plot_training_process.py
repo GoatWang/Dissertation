@@ -10,11 +10,11 @@ matplotlib.rcParams.update({
     'pgf.rcfonts': False,
 })
 
-def plot_progress(df, n_rows, title, xaxis, yaxis, xlabel, ylabel, legend=True, fig_fp=None):
+def plot_progress(df, n_rows, title, xaxis, yaxis, xlabel, ylabel, legend=True, fig_fp=None, figsize=(7, 4)):
     assert type(yaxis) is list, "xaxis should be list type"
 
     df = df.loc[:n_rows]
-    plt.figure(figsize=(7, 4))
+    plt.figure(figsize=figsize)
 
     for y in yaxis:
         plt.plot(df.loc[:n_rows, xaxis], df.loc[:n_rows, y], label=y)
@@ -33,6 +33,7 @@ def plot_progress(df, n_rows, title, xaxis, yaxis, xlabel, ylabel, legend=True, 
         
     # plt.savefig(fig_fp)
     # print("file saved to ", fig_fp)
+    plt.tight_layout()
     plt.savefig(fig_fp.replace(".png", ".pgf"))
     print("file saved to ", fig_fp.replace(".png", ".pgf"))
 
@@ -53,7 +54,7 @@ if __name__ == "__main__":
     for segment in ['0_overall', '1_head', '2_middle', '3_tail']:
         df = pd.read_csv("data/4_4_finalscore_" + segment + ".csv")
         fig_fp = os.path.join(save_dir, "4_4_finalscore_" + segment + ".png")
-        plot_progress(df, n_rows=40, title=None, xaxis='epoch', yaxis=['IC', 'AFRICAN-AR'], xlabel='Epoch', ylabel='mAP', fig_fp=fig_fp)
+        plot_progress(df, n_rows=40, title=None, xaxis='epoch', yaxis=['IC', 'AFRICAN-AR'], xlabel='Epoch', ylabel='mAP', fig_fp=fig_fp, figsize=(5, 3))
 
     # df = pd.read_csv("data/AFRICANPretraining.csv")
     # fig_fp = os.path.join(save_dir, "AFRICANPretraining.png")

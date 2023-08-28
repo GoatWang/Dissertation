@@ -130,7 +130,7 @@
   bibstyle=ieee,
   maxnames=1000,
   mincrossrefs=99,
-  sorting=nyt,
+  sorting=none,
 ]{biblatex}
 
 % this is necessary to use ACM references in a non-ACM class

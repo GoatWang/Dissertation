@@ -76,7 +76,7 @@ To assess the impact of AFRICAN pretraining, A comparison between the following 
 
 \begin{enumerate}
     \item w/o-AFRICAN: CLIP model without AFRICAN pretraining.
-    \item with-AFRICAN: CLIP model with AFRICAN pertaining .
+    \item with-AFRICAN: CLIP model with AFRICAN pertaining.
 \end{enumerate}
 
 The results are presented in Table \ref{tab:africanpretrainingresults} and the epoch-wise performance is visualized in Figure \ref{fig:tp_africanpretraining}. The findings suggest that the model is able to distinguish the identity source of augmented images with almost 80\% accuracy. 
@@ -130,6 +130,94 @@ To delve deeper, the attention maps of the vision transformer (ViT) within the m
 The AFRICAN model for action recognition, denoted as AFRICAN-AR, the structure is illustrated in Figure \ref{fig:modelstructaf_ar}, which is trained with a Focal Loss and adamw optimizer, using a learning rate of 0.00015 on a single A100 GPU. Since the video clip module of the InterVideo takes longer to converge, as illustrated in Figure \ref{fig:tp_backbone} where the IC model does not improve after Epoch 40, the models are all trained for 40 epochs in this experiment. The mAP is also used as the evaluation metric in this task.
 
 The results for action recognition at Epoch 40 are presented in Table \ref{tab:allresults40}, and the results at the best epoch are shown in Table \ref{tab:allresultsbest}. With the stream of AFRICAN pretrained weights, the AFRICAN-AR are able to outperform the other models in all measured aspects at Epoch 40, with an overall mean Average Precision (mAP) of 54.02\%. At the best epoch, the AFRICAN-AR model generally performs best with an overall mAP of 55.08\%, except in the Tail metric, where IC takes the lead with 48.96\%.
+
+
+\begin{figure}
+    \centering
+    \begin{adjustwidth}{-0.2\linewidth}{-0.07\linewidth}
+    \begin{subfigure}[b]{0.7\textwidth}
+        \includegraphics[width=\textwidth]{assets/charts/4_4_finalscore_0_overall.pdf}
+        \caption{Subfigure 1}
+        \label{fig:subfig1}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.7\textwidth}
+        \includegraphics[width=\textwidth]{assets/charts/4_4_finalscore_1_head.pdf}
+        \caption{Subfigure 2}
+        \label{fig:subfig2}
+    \end{subfigure}
+
+    \vspace{10pt} % Adjust the spacing as needed
+
+    \begin{subfigure}[b]{0.7\textwidth}
+        \includegraphics[width=\textwidth]{assets/charts/4_4_finalscore_0_overall.pdf}
+        \caption{Subfigure 3}
+        \label{fig:subfig3}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.7\textwidth}
+        \includegraphics[width=\textwidth]{assets/charts/4_4_finalscore_3_tail.pdf}
+        \caption{Subfigure 4}
+        \label{fig:subfig4}
+    \end{subfigure}
+    
+    \caption{Main figure caption}
+    \label{fig:main}
+    
+\end{adjustwidth}
+\end{figure}
+
+
+% \begin{figure}[htbp]
+%     \centering
+%     \subfigure[]{\includegraphics[width=0.4\linewidth]{assets/charts/4_4_finalscore_0_overall.pdf}}
+    
+%     \subfigure[Caption for Subfigure 2]{\includegraphics[width=0.4\linewidth]{assets/charts/4_4_finalscore_1_head.pdf}} \\
+    
+%     \subfigure[Caption for Subfigure 3]{\includegraphics[width=0.4\linewidth]{assets/charts/4_4_finalscore_2_middle.pdf}}
+    
+%     \subfigure[Caption for Subfigure 4]{\includegraphics[width=0.4\linewidth]{assets/charts/4_4_finalscore_3_tail.pdf}}
+    
+%     \caption{The Performance of IC and AFRICAN-AR on each Epoch for Different Segments}
+%     \label{fig:trainingprocessfinal}
+% \end{figure}
+
+
+% \begin{figure}
+%     \centering
+
+%     \begin{adjustwidth}{-0.15\linewidth}{-0.15\linewidth}
+%         \begin{subfigure}{85pt}
+%             \includegraphics[scale=0.85]{4_4_finalscore_0_overall.pdf} % a figure 85pt wide
+%             \caption{One}
+%         \end{subfigure}
+%         \begin{subfigure}{85pt}
+%             \includegraphics[scale=0.85]{4_4_finalscore_0_overall.pdf} % 
+%             \caption{Two}
+%         \end{subfigure}
+        
+%         % \ffigbox[\FBwidth]{\caption{Overall Performancet}\label{subfig:tpf1}}{\includegraphics[width=1\linewidth]{assets/charts/4_4_finalscore_0_overall.pdf}}
+%         % \ffigbox[\FBwidth]{\caption{Head Segment Performance}\label{subfig:tpf2}}{\includegraphics[width=1\linewidth]{assets/charts/4_4_finalscore_1_head.pdf}}
+%         % \vspace{-5pt}
+%     \end{adjustwidth}
+%     \caption{overview: reconstruction (a) and label-mixing~(b).}
+%     \label{fig:method}
+        
+% \end{figure}
+
+
+% \begin{figure}[htbp]
+%     \centering
+%     \begin{floatrow}
+%         \ffigbox[\FBwidth]{\caption{Overall Performancet}\label{subfig:tpf1}}{\includegraphics[width=1\linewidth]{assets/charts/4_4_finalscore_0_overall.pdf}}
+%         \ffigbox[\FBwidth]{\caption{Head Segment Performance}\label{subfig:tpf2}}{\includegraphics[width=1\linewidth]{assets/charts/4_4_finalscore_1_head.pdf}}
+%     \end{floatrow}
+        
+%     \begin{floatrow}
+%         \ffigbox[\FBwidth]{\caption{Middle Segment Performance}\label{subfig:tpf3}}{\includegraphics[width=1\linewidth]{assets/charts/4_4_finalscore_2_middle.pdf}}
+%         \ffigbox[\FBwidth]{\caption{Tail Segment Performance}\label{subfig:tpf4}}{\includegraphics[width=1\linewidth]{assets/charts/4_4_finalscore_3_tail.pdf}}
+%     \end{floatrow}
+%     \caption[The Performance of IC and AFRICAN-AR on each Epoch for Different Segments]{This figure illustrated The Performance of IC and AFRICAN-AR on each Epoch for Different Segments}
+%     \label{fig:trainingprocessfinal}
+% \end{figure}
 
 
 \begin{table}[ht]

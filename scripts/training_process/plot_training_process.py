@@ -20,10 +20,10 @@ def plot_progress(df, n_rows, title, xaxis, yaxis, xlabel, ylabel, legend=True, 
         plt.plot(df.loc[:n_rows, xaxis], df.loc[:n_rows, y], label=y)
 
     if title is not None:
-        plt.title(title)
+        plt.title(title, size=14)
 
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
+    plt.xlabel(xlabel, size=14)
+    plt.ylabel(ylabel, size=14)
     plt.grid(True)
     if legend:
         plt.legend(loc="lower right")

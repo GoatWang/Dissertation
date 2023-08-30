@@ -1,13 +1,13 @@
 \section{CLIP with Prompt Engineering}
-\subsection{Impact of Batch Size on Long-Tail Dataset}
-There are very few studies that focus on the impact of batch size on long-tail datasets. Some of my experiments suggest that the learning curves of models with different batch sizes perform differently. In the range of batch sizes from 8 to 128, large batch sizes may lead to better performance. For example, Figure \ref{fig:futurework_bs} shows the VC\_AT with batch sizes of 16 and 128, denoted as VC\_AT\_bs16 and VC\_AT\_bs128. VC\_AT\_bs16 increases rapidly but reaches a lower ceiling, while VC\_AT\_bs128 may perform better in the end.
+% \subsection{Impact of Batch Size on Long-Tail Dataset}
+% There are very few studies that focus on the impact of batch size on long-tail datasets. Some of my experiments suggest that the learning curves of models with different batch sizes perform differently. In the range of batch sizes from 8 to 128, large batch sizes may lead to better performance. For example, Figure \ref{fig:futurework_bs} shows the VC\_AT with batch sizes of 16 and 128, denoted as VC\_AT\_bs16 and VC\_AT\_bs128. VC\_AT\_bs16 increases rapidly but reaches a lower ceiling, while VC\_AT\_bs128 may perform better in the end.
 
-\begin{figure}[ht]
-    \centering
-    \resizebox{1.0\textwidth}{!}{\input{"assets/charts/6_1_VCBatchSize.pgf"}}
-    \caption[mAP of VC\_AT\_bs16 and VC\_AT\_bs128 on each Epoch]{This chart illustrates the mAP of VC\_Vision, VC\_Proj, IC, VC\_AT, VC\_DF on each epoch.}
-    \label{fig:futurework_bs}
-\end{figure}
+% \begin{figure}[ht]
+%     \centering
+%     \resizebox{1.0\textwidth}{!}{\input{"assets/charts/6_1_VCBatchSize.pgf"}}
+%     \caption[mAP of VC\_AT\_bs16 and VC\_AT\_bs128 on each Epoch]{This chart illustrates the mAP of VC\_Vision, VC\_Proj, IC, VC\_AT, VC\_DF on each epoch.}
+%     \label{fig:futurework_bs}
+% \end{figure}
 
 \subsection{Percentage of Learnable Weights on Medium-Size Dataset}
 Transfer learning is a popular technique for achieving better results without large amounts of data. However, most research focuses on one-shot or few-shot learning problems, with few studies exploring medium-size datasets, especially those with domain adaptation gaps. Exploring this topic may provide insights for future research into tuning learnable layers when applying transfer learning.

@@ -14,6 +14,8 @@
 \usepackage{rotating}
 \usepackage{changepage}
 \usepackage{subcaption}
+\usepackage{ulem}
+
 \addbibresource{refs.bib}
 
 
@@ -23,11 +25,11 @@
 %%%%%%%%%%%%%%%%%%%
 
 
-\title{Action Frame Identity Contrastive Learning (AFRICAN) For Animal Action Recognition} %TODO: change title
-\subtitle{ on Animal Kingdom Dataset} %TODO: change title
+\title{Enhancing Action Recognition in the Animal Kingdom Dataset: Addressing Long-Tail Distribution and Temporal Redundancy} 
+% \subtitle{} %TODO: change title
 \author{Hsuan-Chung, Wang}
 
-\DTMsavedate{thesisdate}{2023-02-02}        % do not change name, will be re-used
+\DTMsavedate{thesisdate}{2023-09-05}        % do not change name, will be re-used
 \date{\printdatewithoutmonth{thesisdate}}
 
 % change as appropriate, e.g.
@@ -53,66 +55,30 @@
 \cleardoubleoddemptypage
 
 \begin{abstract} %TODO: finish it
+% Abstract should be not more than 300 words, for either MSc or PhD.
 
-  % Abstract should be not more than 300 words, for either MSc or PhD.
+This research discusses the solutions to two significant challenges for animal action recognition: the long-tail issue and the temporal redundancy problem. CLIP model combined with text prompt engineering is experimented with to solve the long-tail problem. The approach leverages class embeddings as learning targets instead of traditional one-hot encoding, significantly mitigating the unbalanced distribution of learning targets caused by the long-tail issue. Simultaneously, the AFRICAN method is introduced to handle the temporal redundancy issue. It utilizes a contrastive learning framework, encouraging the model to capture subtle and fine-grained variations between video frames. By integrating CLIP, good at understanding the semantic meaning of images, into AFRICAN, excellent at observing fine-grained displacements across frames, the AFRICAN model for action recognition is able to outperform the baseline model 24.53\% mAP for all classes, 10.83\% for the head classes, 26.88\% for the middle classes, and 22.41\% for the tail classes.
 
-  This section should pr\'{e}cis the project context, aims and objectives,
-  and main contributions (e.g. deliverables) and achievements; the same 
-  section may be called an abstract elsewhere.  The goal is to ensure the 
-  reader is clear about what the topic is, what you have done within this 
-  topic, \emph{and} what your view of the outcome is.
-
-  The former aspects should be guided by your specification: essentially 
-  this section is a (very) short version of what is typically the first 
-  chapter. If your project is experimental in nature, this should include 
-  a clear research hypothesis.  This will obviously differ significantly
-  for each project, but an example might be as follows:
-
-  \begin{quote}
-    My research hypothesis is that a suitable genetic algorithm will yield
-    more accurate results (when applied to the standard ACME data set) than 
-    the algorithm proposed by Jones and Smith, while also executing in less
-    time.
-  \end{quote}
-
-  The latter aspects could be presented as a concise, factual bullet point list.
-  Again the points will differ for each project, but might be as follows:
-
-  \begin{quote}
-    \begin{itemize}
-    \item I spent $120$ hours collecting material on and learning about the Java
-      garbage-collection subsystem. 
-    \item I wrote a total of $5000$ lines of source code, comprising a Linux
-      device driver for a robot (in C) and a GUI (in Java) that is used to
-      control it.
-    \item I designed a new algorithm for computing the non-linear mapping from
-      A-space to B-space using a genetic algorithm, see page $17$.
-    \end{itemize}
-  \end{quote}
+\begin{itemize}
+    \item Comprehensive investigation into the challenges associated with the long-tail and temporal redundancy issues in action recognition tasks.
+    \item Exploration of the CLIP model with text prompt engineering as a solution for the long-tail issue, converting the traditional one-hot encoding learning target to class embedding, thus enhancing the model's performance, especially for middle and tail classes.
+    \item Introduction of AFRICAN, a novel method leveraging the contrastive learning framework, to focus on the subtle and fine-grained differences between video frames, addressing the temporal redundancy issue effectively.
+    \item Extensive experimentation, as detailed from page 31 onwards, demonstrating the efficacy of the CLIP model with text prompt engineering and AFRICAN in addressing their respective challenges.
+    \item investigation and discussion on the comparative performance of ImageCLIP versus VideoCLIP and the reasons for MSQNet's performance over AFRICAN.
+\end{itemize}
 \end{abstract}
 
-\begin{dedication}  %TODO: finish it
-  To my darling mama,\\
-  sine-qua-non.
-\end{dedication}
+% \begin{dedication}  %TODO: finish it
+%   To my darling mama,\\
+%   sine-qua-non.
+% \end{dedication}
 
 \begin{acknowledgements}
-It is common practice (although totally optional) to acknowledge any third-party
-advice, contribution or influence you have found useful during your work.
-Examples include support from friends or family, the input of your Supervisor
-and/or Advisor, external organisations or persons who have supplied resources
-of some kind (e.g., funding, advice or time), and so on.
+It is common practice (although totally optional) to acknowledge any third-party advice, contribution or influence you have found useful during your work. Examples include support from friends or family, the input of your Supervisor and/or Advisor, external organisations or persons who have supplied resources of some kind (e.g., funding, advice or time), and so on.
 \end{acknowledgements}
 
 \begin{declaration}
-  I declare that the work in this dissertation was carried out in accordance
-  with the requirements of the University's Regulations and Code of Practice for
-  Taught Programmes and that it has not been submitted for any other academic award.
-  Except where indicated by specific reference in the text, the work is the
-  candidate's own work. Work done in collaboration with, or with the assistance
-  of, others, is indicated as such. Any views expressed in the
-  dissertation are those of the author.
-  
+  I declare that the work in this dissertation was carried out in accordance with the requirements of the University's Regulations and Code of Practice for Taught Programmes and that it has not been submitted for any other academic award. Except where indicated by specific reference in the text, the work is the candidate's own work. Work done in collaboration with, or with the assistance of, others, is indicated as such. Any views expressed in the dissertation are those of the author.
   \vspace{2cm}
 
   \includegraphics[width=4cm]{sig} %TODO: change sig.png

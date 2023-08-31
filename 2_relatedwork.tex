@@ -6,25 +6,25 @@ In previous research, three main groups of strategies have been employed to deal
 \subsection{Re-weighting}
 Re-weighting is a technique used to adjust the penalties for specific groups of classes or samples. This is typically achieved by modifying the loss function. The most vanilla re-weighting scheme involves applying the inverse class frequency to the loss. In this manner, more frequent classes receive a lower weight of loss, enabling the model to put more emphasis on the tail classes \parencite{khan2017cost, mostajabi2015feedforward}.
 
-However, it has been proved that as the number of samples increases, the marginal benefit of model performance diminishes. As a result, directly applying the inverse class frequency to the loss function may overly reduce the weight of losses for the frequent classes. To address this, the Class Balanced Loss (CB Loss) was introduced. As illustrated in Figure \ref{fig:concetpcbloss}, CB Loss calculates the effective number of samples to balance the inverse class frequency, yielding a more reasonable weight for the loss \parencite{cui2019class}.
+However, it has been proved that as the number of samples increases, the marginal benefit of model performance diminishes. As a result, directly applying the inverse class frequency to the loss function may overly reduce the weight of losses for the frequent classes. To address this, the Class Balanced Loss (CB Loss) was introduced. It calculates the effective number of samples to balance the inverse class frequency, yielding a more reasonable weight for the loss \parencite{cui2019class}.
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.5\textwidth]{assets/charts_rw/CBLoss}
-    \caption[Conceptual Illustration of CB Loss]{This figure illustrates the concept of CB Loss. provides a visual representation of the CB Loss concept, where the effective number of samples is computed for re-weighting purposes. Source: \parencite{cui2019class}}
-    \label{fig:concetpcbloss}
-\end{figure}
+% \begin{figure}[ht]
+%     \centering
+%     \includegraphics[width=0.5\textwidth]{assets/charts_rw/CBLoss}
+%     \caption[Conceptual Illustration of CB Loss]{This figure illustrates the concept of CB Loss. provides a visual representation of the CB Loss concept, where the effective number of samples is computed for re-weighting purposes. Source: \parencite{cui2019class}}
+%     \label{fig:concetpcbloss}
+% \end{figure}
 
-In contrast to frequency-based re-weighting, Focal Loss focuses on the difficulty level of learning. It scales the penalty to automatically down-weight the contribution of easy examples, which enforces the model to focus more on the hard examples \parencite{lin2017focal}.
+In contrast to frequency-based re-weighting, Focal Loss focuses on the difficulty level of learning. It scales the penalty to automatically down-weight the contribution of easy examples, which forces the model to focus more on the hard examples \parencite{lin2017focal}.
 
-The Label-Distribution-Aware Margin (LDAM) Loss, inspired by the hinge loss of Support Vector Machine, ensures that the model establishes a closer decision boundary while classifying frequent classes, as illustrated in Figure \ref{fig:concetpldam}, to provide room for the less frequent class with more uncertainty. This implies that the model is required to produce higher confidence probabilities to achieve a better performance \parencite{cao2019learning}.
+The Label-Distribution-Aware Margin (LDAM) Loss, inspired by the hinge loss of Support Vector Machine, ensures that the model establishes a closer decision boundary while classifying frequent classes to provide room for the less frequent class with more uncertainty. This implies that the model is required to produce higher confidence probabilities to achieve a better performance \parencite{cao2019learning}.
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.5\textwidth]{assets/charts_rw/LDAM}
-    \caption[Conceptual Illustration of LDAM]{This figure illustrates the LDAM concept, where the decision boundary is adjusted toward the frequent classes to provide room for the less frequent class with more uncertainty. Source: \parencite{cao2019learning}}
-    \label{fig:concetpldam}
-\end{figure}
+% \begin{figure}[ht]
+%     \centering
+%     \includegraphics[width=0.5\textwidth]{assets/charts_rw/LDAM}
+%     \caption[Conceptual Illustration of LDAM]{This figure illustrates the LDAM concept, where the decision boundary is adjusted toward the frequent classes to provide room for the less frequent class with more uncertainty. Source: \parencite{cao2019learning}}
+%     \label{fig:concetpldam}
+% \end{figure}
 
 In the context of videos, re-weighting may not be the best strategy to overcome the long-tail issue. Considering the varying amounts of information in a single video, adjusting the weights to tail classes is likely to introduce noise into the training process \parencite{zhang2021videolt}.
 
@@ -33,39 +33,39 @@ Re-sampling refers to the intuitive use of sampling algorithms to balance the nu
 
 Previous research has also found that data imbalance itself does not affect the performance of representation learning. Although re-sampling has led to better performance in classification results, it actually benefits classifier learning while harming representation learning. Consequently, subsequent research has focused more on re-sampling techniques used in classifier training \parencite{zhou2020bbn, kang2019decoupling}.
 
-Compared to the previous method that focused on re-sampling algorithms, subsequent research has attempted to reconstruct more samples. For instance, VideoLT concatenates frames from different videos to generate additional tail samples \parencite{zhang2021videolt}. Similarly, reconstruction of samples in the embedding space has also been explored by researchers \parencite{liu2022long, perrett2023use}. For example, Long-Tail Mixed Reconstruction \parencite{perrett2023use}, as illustrated in Figure \ref{fig:augembedding}, decomposes the entire model into image encoder and classifier and reconstructs samples using the embeddings generated by the image encoder.
+Compared to the previous method that focused on re-sampling algorithms, subsequent research has attempted to reconstruct more samples. For instance, VideoLT concatenates frames from different videos to generate additional tail samples \parencite{zhang2021videolt}. Similarly, reconstruction of samples in the embedding space has also been explored by researchers \parencite{liu2022long, perrett2023use}. For example, Long-Tail Mixed Reconstruction \parencite{perrett2023use} decomposes the entire model into image encoder and classifier and reconstructs samples using the embeddings generated by the image encoder.
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.5\textwidth]{assets/charts_rw/AugEmbedding}
-    \caption[Illustration of Reconstruction of Samples in the Embedding Space]{This chart illustrates the concept of reconstructing samples in the embedding space. Tail samples, represented in green, are reconstructed from other batch samples using the weighted sum method. row-axis samples of the top-left matrix in the figure denote the features to be reconstructed, while column-axis samples are the features being used for the reconstruction. Grey-highlighted cells are masked out for the weighted sum calculation. Source: \parencite{perrett2023use}}
-    \label{fig:augembedding}
-\end{figure}
+% \begin{figure}[ht]
+%     \centering
+%     \includegraphics[width=0.5\textwidth]{assets/charts_rw/AugEmbedding}
+%     \caption[Illustration of Reconstruction of Samples in the Embedding Space]{This chart illustrates the concept of reconstructing samples in the embedding space. Tail samples, represented in green, are reconstructed from other batch samples using the weighted sum method. row-axis samples of the top-left matrix in the figure denote the features to be reconstructed, while column-axis samples are the features being used for the reconstruction. Grey-highlighted cells are masked out for the weighted sum calculation. Source: \parencite{perrett2023use}}
+%     \label{fig:augembedding}
+% \end{figure}
 
 These re-sampling techniques certainly mitigate poor performance in the tail classes. Nevertheless, they do not guarantee the production of samples to have the same variety and correctness as the collected data.
 
 \subsection{Few-Shot Learning}
 Recent research has increasingly focused on learning techniques that require fewer training data to achieve acceptable performance.
 
-Model-Agnostic Meta-Learning (MAML) \parencite{finn2017model} introduced the concept of learning to initialise better parameters for training. This innovation has led to a series of studies on meta-learning. Apart from initialisation \parencite{nichol2018first, 2018Reptile}, a large amount of research has emerged, applying meta-learning to various aspects, such as optimization technique search \parencite{andrychowicz2016learning}, data augmentation strategies \parencite{li2020dada, galashov2022data, cubuk2018autoaugment}, and even re-weighting strategies \parencite{shu2019meta}. For example, Figure \ref{fig:concetpdada} illustrates the concept of Differential Automation Data Augmentation (DADA) \parencite{li2020dada}, which presents a differentiable approach to image augmentation for meta-learning.
+Model-Agnostic Meta-Learning (MAML) \parencite{finn2017model} introduced the concept of learning to initialise better parameters for training. This innovation has led to a series of studies on meta-learning. Apart from initialisation \parencite{nichol2018first, 2018Reptile}, a large amount of research has emerged, applying meta-learning to various aspects, such as optimization technique search \parencite{andrychowicz2016learning}, data augmentation strategies \parencite{li2020dada, galashov2022data, cubuk2018autoaugment}, and even re-weighting strategies \parencite{shu2019meta}. For example, Differential Automation Data Augmentation (DADA) \parencite{li2020dada} presents a differentiable approach to image augmentation for meta-learning.
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.8\textwidth]{assets/charts_rw/DADA}
-    \caption[Illustration of Differential Automation Data Augmentation]{This figure illustrates the concept of Differential Automation Data Augmentation. Source: \parencite{li2020dada}}
-    \label{fig:concetpdada}
-\end{figure}
+% \begin{figure}[ht]
+%     \centering
+%     \includegraphics[width=0.8\textwidth]{assets/charts_rw/DADA}
+%     \caption[Illustration of Differential Automation Data Augmentation]{This figure illustrates the concept of Differential Automation Data Augmentation. Source: \parencite{li2020dada}}
+%     \label{fig:concetpdada}
+% \end{figure}
 
 With the capability to learn from small datasets, few-shot learning techniques also mitigate the long-tail issue. MetaModelNet, for example, regresses the parameters from models trained with fewer data to those trained with more \parencite{NIPS2017_147ebe63}. Moreover, some studies have indicated that augmentation or memory retrieval in the embedding space are effective ways to handle tail classes \parencite{liu2019large, Zhu_2020_CVPR, li2021metasaug, Fu_2022_ACCV}.
 
-These approaches primarily focus on few-shot learning or generalising the representation learned from the head classes to the tail classes. In contrast,  CLIP \parencite{radford2021learning} embeds both images and text into a unified semantic space, as shown in Figure \ref{fig:clipstructure}. This empowers the model to effectively leverage human intelligence to understand visual data and balance the distribution of learning targets \parencite{ma2022x}. 
+These approaches primarily focus on few-shot learning or generalising the representation learned from the head classes to the tail classes. In contrast,  CLIP \parencite{radford2021learning} embeds both images and text into a unified semantic space. This empowers the model to effectively leverage human intelligence to understand visual data and balance the distribution of learning targets \parencite{ma2022x}. 
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.5\textwidth]{assets/charts_rw/CLIP}
-    \caption[Illustration of CLIP Model Structure]{This figure illustrates the structure of the CLIP model. The left stream encodes images, while the right stream encodes text. Both streams are embedded into the same semantic space. Source: \parencite{cui2022contrastive}}
-    \label{fig:clipstructure}
-\end{figure}
+% \begin{figure}[ht]
+%     \centering
+%     \includegraphics[width=0.5\textwidth]{assets/charts_rw/CLIP}
+%     \caption[Illustration of CLIP Model Structure]{This figure illustrates the structure of the CLIP model. The left stream encodes images, while the right stream encodes text. Both streams are embedded into the same semantic space. Source: \parencite{cui2022contrastive}}
+%     \label{fig:clipstructure}
+% \end{figure}
 
 With these advantages, CLIP has been applied to several image downstream tasks including few-shot learning \parencite{zhang2022tip}, segmentation \parencite{wang2022cris}, video retrieval \parencite{ma2022x}, object detection \parencite{lin2023gridclip}, and captioning \parencite{mokady2021clipcap}. In addition, CLIP for videos has also been proposed \parencite{xu-etal-2021-videoclip, wang2022internvideo}, achieving state-of-the-art results in several video downstream tasks such as classification, video retrieval, and vision question answering.
 
@@ -75,14 +75,14 @@ This research focuses on the long-tail issue and has demonstrated that the text 
 Boundaries of objects in frames and small displacements between neighbouring frames have been identified as significant features for action recognition \parencite{10.1007/978-3-030-12939-2_20}. In order to enhance the model in this aspect, optical flow and pretext learning are two research directions. 
 
 \subsection{Optical Flow}
-To capture subtle boundary changes between frames, the integration of optical flow as an independent stream within model structures has become a popular strategy for action recognition \parencite{sevilla2019integration, tran2015learning, carreira2017quo}. For instance, the I3D architecture \parencite{carreira2017quo} utilizes a 3D CNN on both the RGB and optical flow stream, whose outputs are subsequently summed together to generate the final prediction. This is showcased in subfigure (e) of Figure \ref{fig:structuresi3d}. As Figure \ref{fig:structuresi3d} illustrates, it compares its structure to other four networks, two of which also incorporate optical flow as an independent stream for action recognition.
+To capture subtle boundary changes between frames, the integration of optical flow as an independent stream within model structures has become a popular strategy for action recognition \parencite{sevilla2019integration, tran2015learning, carreira2017quo}. For instance, the I3D architecture \parencite{carreira2017quo} utilizes a 3D CNN on both the RGB and optical flow stream, whose outputs are subsequently summed together to generate the final prediction. 
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=1.0\textwidth]{assets/charts_rw/I3D}
-    \caption[Illustration of Structures Discussed in I3D]{The structures discussed in the I3D paper, with subfigure (e) describingthe I3D structure itself. Source: \parencite{carreira2017quo}}
-    \label{fig:structuresi3d}
-\end{figure}
+% \begin{figure}[ht]
+%     \centering
+%     \includegraphics[width=1.0\textwidth]{assets/charts_rw/I3D}
+%     \caption[Illustration of Structures Discussed in I3D]{The structures discussed in the I3D paper, with subfigure (e) describingthe I3D structure itself. Source: \parencite{carreira2017quo}}
+%     \label{fig:structuresi3d}
+% \end{figure}
 
 Some research suggests that optical flow may be replaced or improved due to the expensive computing resources used for its calculation. Such research has proposed networks to replace the pretrained optical flow model with architectures that inherently capture motion between frames or predict the optical flow in an end-to-end classification network. While these proposals are often more efficient in terms of computational resources and model parameters, they suffer from inferior performance \parencite{Lee_2018_ECCV, 8354283, Piergiovanni_2019_CVPR}.
 
@@ -109,22 +109,20 @@ The subsequent subsections will elaborate on the mechanisms of Multi-Head Attent
 
 \begin{figure}
     \centering
-    \begin{subfigure}[b]{0.35\textwidth}
+    \begin{subfigure}[b]{0.2\textwidth}
         \centering
         \includegraphics[width=\textwidth]{assets/charts_rw/Transformer_Attention.png}
-        \caption{Scaled Dot-Product Attention}
+        \caption{}
         \label{fig:dotproductattention}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.35\textwidth}
+    \begin{subfigure}[b]{0.3\textwidth}
         \centering
         \includegraphics[width=\textwidth]{assets/charts_rw/Transformer_MultiHeadAttention.png}
-        \caption{Multi-Head Attention}
+        \caption{}
         \label{fig:multiheadattention}
     \end{subfigure}
-    \caption{Mechanisms of Scaled Dot-Product Attention and Multi-Head Attention. Source: \parencite{vaswani2017attention}}
-    \caption{Mechanisms of Scaled Dot-Product Attention and Multi-Head Attention. Source: \parencite{vaswani2017attention}}
-    
+    \caption{Mechanisms of Scaled Dot-Product Attention and Multi-Head Attention. (a) Scaled Dot-Product Attention. (b) Multi-Head Attention. Source: \parencite{vaswani2017attention}}
     \label{fig:attentionmechanism}
 \end{figure}
 

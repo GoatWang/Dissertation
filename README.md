@@ -1,3 +1,8 @@
+# Word counts
+```
+perl texcount.pl *.tex
+```
+
 # University of Bristol dissertation template
 
 This template is compatible with the Bristol regulations for both Postgraduate

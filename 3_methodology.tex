@@ -18,8 +18,8 @@ In this section, the use of CLIP with prompt engineering for animal action recog
 
 Two model structures are employed to assess action recognition performance: 
 \begin{enumerate}
-    \item VideoCLIP: CLIP pretrained on videos. The video CLIP module of InternVideo \parencite{wang2022internvideo} is used here. The entire structure is illustrated in Figure \ref{fig:modelstructure_vc}.
-    \item ImageCLIP: CLIP pretrained on images. The original CLIP \parencite{radford2021learning} is used here. The whole model model structure is illustrated in Figure \ref{fig:modelstructure_ic}.
+    \item \textbf{VideoCLIP}: CLIP pretrained on videos. The video CLIP module of InternVideo \parencite{wang2022internvideo} is used here. The entire structure is illustrated in Figure \ref{fig:modelstructure_vc}.
+    \item \textbf{ImageCLIP}: CLIP pretrained on images. The original CLIP \parencite{radford2021learning} is used here. The whole model model structure is illustrated in Figure \ref{fig:modelstructure_ic}.
 \end{enumerate}
 
 Both models utilise CLIP and prompt engineering for action recognition, using videos and text prompts as input. The prompt template "A video of an animal <action>. This action is a kind of <category of action> behaviour." is used to generate the prompts for producing class embeddings. As shown in Figure \ref{fig:1_2_ClassEmbeddingInternVideo}, this approach can produce meaningful distributed class embeddings.
@@ -42,7 +42,7 @@ The whole AFRICAN consists of two stages: the pretraining stage and the action r
 f\label{fig:modelstructafsim}
 \end{figure}
 
-During the pretraining stage, AFRICAN applies contrastive learning techniques to distinguish whether two images are augmented from the same frame in a video or not. Figure \ref{fig:modelstructafsim} illustrates the batch operation of the model, which aligns with Figure \ref{fig:clipstructure} except for the input data. The input for forwarding, denoted by $x_i$, represents the $i$-th video sample in the dataset. $x_i$ is then copied twice into $x_{i1}$ and $x_{i2}$, each of which independently passes through the same video augmentation function $aug(\cdot)$ with different random states, as expressed in Equations \ref{eq:aug1} and \ref{eq:aug2}. 
+During the pretraining stage, AFRICAN applies contrastive learning techniques to distinguish whether two images are augmented from the same frame in a video or not. Figure \ref{fig:modelstructafsim} illustrates the batch operation of the model, which aligns with Figure \ref{fig:cliplossstructure} except for the input data. The input for forwarding, denoted by $x_i$, represents the $i$-th video sample in the dataset. $x_i$ is then copied twice into $x_{i1}$ and $x_{i2}$, each of which independently passes through the same video augmentation function $aug(\cdot)$ with different random states, as expressed in Equations \ref{eq:aug1} and \ref{eq:aug2}. 
 
 \begin{equation}
     \label{eq:aug1}

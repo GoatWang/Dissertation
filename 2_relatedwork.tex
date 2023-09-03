@@ -4,7 +4,7 @@ In this chapter, methodologies to address the long-tail issue and the challenge 
 In previous research, three main groups of strategies have been employed to deal with the long-tail issue: Re-weighting, Re-sampling, and Few-Shot Learning.
 
 \subsection{Re-weighting}
-Re-weighting is a technique used to adjust the penalties for specific groups of classes or samples. This is typically achieved by modifying the loss function. The most vanilla re-weighting scheme involves applying the inverse class frequency to the loss. In this manner, more frequent classes receive a lower weight of loss, enabling the model to put more emphasis on the tail classes \parencite{khan2017cost, mostajabi2015feedforward}.
+Re-weighting is a technique used to adjust the penalties for specific groups of classes or samples. This is typically achieved by modifying the loss function. The most basic re-weighting scheme involves applying the inverse class frequency to the loss. In this manner, more frequent classes receive a lower weight of loss, enabling the model to put more emphasis on the tail classes \parencite{khan2017cost, mostajabi2015feedforward}.
 
 However, it has been proved that as the number of samples increases, the marginal benefit of model performance diminishes. As a result, directly applying the inverse class frequency to the loss function may overly reduce the weight of losses for the frequent classes. To address this, the Class Balanced Loss (CB Loss) was introduced. It calculates the effective number of samples to balance the inverse class frequency, yielding a more reasonable weight for the loss \parencite{cui2019class}.
 
@@ -42,7 +42,7 @@ Compared to the previous method that focused on re-sampling algorithms, subseque
 %     \label{fig:augembedding}
 % \end{figure}
 
-These re-sampling techniques certainly mitigate poor performance in the tail classes. Nevertheless, they do not guarantee the production of samples to have the same variety and correctness as the collected data.
+Although these re-sampling techniques certainly mitigate poor performance in the tail classes, they do not guarantee the production of samples to have the same variety and correctness as the collected data.
 
 \subsection{Few-Shot Learning}
 Recent research has increasingly focused on learning techniques that require fewer training data to achieve acceptable performance.
@@ -87,7 +87,7 @@ To capture subtle boundary changes between frames, the integration of optical fl
 Some research suggests that optical flow may be replaced or improved due to the expensive computing resources used for its calculation. Such research has proposed networks to replace the pretrained optical flow model with architectures that inherently capture motion between frames or predict the optical flow in an end-to-end classification network. While these proposals are often more efficient in terms of computational resources and model parameters, they suffer from inferior performance \parencite{Lee_2018_ECCV, 8354283, Piergiovanni_2019_CVPR}.
 
 \subsection{Pretext Learning}
-Some more recent studies focus on designing different pretext tasks for the model to learn in a self-supervised manner \parencite{wang2022internvideo}.
+Recent studies have focused on designing different pretext tasks for the model to learn in a self-supervised manner \parencite{wang2022internvideo}.
 
 With meticulous design, pretext learning can empower the model to produce high-quality visual representation within specific semantic spaces. These representations can further be employed in downstream tasks such as action recognition, video retrieval, or video captioning \parencite{10.1145/3577925}.
 
@@ -100,7 +100,7 @@ The Transformer architecture, originally introduced for machine translation \par
 
 Before the introduction of ViT, 3D Convolutional Neural Networks (3D CNN) were the standard backbone networks for extracting features from videos. Notable examples include C3D \parencite{tran2015learning}, I3D \parencite{carreira2017quo}, and Slowfast \parencite{feichtenhofer2019slowfast}. However, as the ViT was demonstrated to have superior theoretical and practical effectiveness, it began to be adopted as the primary backbone for video processing. A significant challenge for this shift is the computational cost. Despite the attention mechanism's impressive capabilities, it is notably resource-intensive.
 
-Considering the temporal redundancy inherent in videos, the computation of attention could be reduced along the temporal axis. To this end, TimeSformer \parencite{bertasius2021space} was introduced, which computes key-query mappings solely for tokens that share specific spatial-temporal relationships. Subsequently, Uniformer \parencite{li2022uniformer} and its extension, Uniformer V2 \parencite{li2022uniformerv2}, were proposed to integrate the strengths of 3D CNN, good at extracting neighbouring features, with those of ViT, which efficiently maps the relationship between all tokens in a sequence. This hybrid structure proved to be an efficient video feature extractor, both reducing computational costs and enhancing performance. 
+Considering the temporal redundancy inherent in videos, the computation of attention could be reduced along the temporal axis. To this end, TimeSformer \parencite{bertasius2021space} was introduced, which computes key-query mappings exclusively for tokens that share specific spatial-temporal relationships. Subsequently, Uniformer \parencite{li2022uniformer} and its extension, Uniformer V2 \parencite{li2022uniformerv2}, were proposed to integrate the strengths of 3D CNN, good at extracting neighbouring features, with those of ViT, which efficiently maps the relationship between all tokens in a sequence. This hybrid structure proved to be an efficient video feature extractor, both reducing computational costs and enhancing performance. 
 
 The subsequent subsections will elaborate on the mechanisms of Multi-Head Attention, ViT, TimeSformer, Uniformer, and its extension, Uniformer V2.
 
@@ -126,11 +126,11 @@ The subsequent subsections will elaborate on the mechanisms of Multi-Head Attent
     \label{fig:attentionmechanism}
 \end{figure}
 
-For a clear introduction to ViT, understanding the Transformer's attention mechanism is pivotal. This process is visually described in Figure \ref{fig:attentionmechanism}. Given input data $X \in \mathbf{R}^{S \times d_k}$, where $S$ denotes the sequence length and $d_k$ stands for the embedding dimension, the initial step involves transforming the input vector using matrices $W_q \in \mathbf{R}^{d_k \times d_k}$, $W_k \in \mathbf{R}^{d_k \times d_k}$, and $W_v \in \mathbf{R}^{d_k \times d_k}$, producing three new vectors: query $Q \in \mathbf{R}^{S \times d_k}$, key $K \in \mathbf{R}^{S \times d_k}$, and value $V \in \mathbf{R}^{S \times d_k}$, as shown in the grey-shaded linear block of Figure \ref{fig:multiheadattention}.
+To clearly introduce ViT, it's pivotal to understand the Transformer's attention mechanism. The attention mechanism of the Transformer is visually described in Figure \ref{fig:attentionmechanism}. Given the input data $X \in \mathbf{R}^{S \times d_k}$, where $S$ denotes the sequence length and $d_k$ represents the embedding dimension, the initial step involves transforming the input vector using matrices $W_q \in \mathbf{R}^{d_k \times d_k}$, $W_k \in \mathbf{R}^{d_k \times d_k}$, and $W_v \in \mathbf{R}^{d_k \times d_k}$, producing three new vectors: query $Q \in \mathbf{R}^{S \times d_k}$, key $K \in \mathbf{R}^{S \times d_k}$, and value $V \in \mathbf{R}^{S \times d_k}$, as shown in the grey linear block of Figure \ref{fig:multiheadattention}.
 
 These vectors, $Q$, $K$, and $V$ are then divided into $H$ heads, reshaping them to $(S, \frac{d_k}{H})$. The vectors for each head, specifically, $Q \in \mathbf{R}^{S \times \frac{d_k}{H}}$, $K \in \mathbf{R}^{S \times \frac{d_k}{H}}$, and $V \in \mathbf{R}^{S \times \frac{d_k}{H}}$ are then processed using the Scaled Dot-Product Attention, as illustrated in Figure \ref{fig:dotproductattention}. 
 
-To calculate the attention score for tokens in a particular head, $Q$ and $K$ are multiplied together, scaled by the factor $\frac{1}{\sqrt{d_k}}$, and followed by a softmax function. The resulting matrix, $softmax\left(\frac{Q K^T}{\sqrt{d_k}}\right)$, having dimensions $(\frac{d_k}{H}, \frac{d_k}{H})$, represents the attention scores between all token pairs within that head. By multiplying this scores with $V$, the attention values, $\operatorname{Attention}(Q, K, V)$, of shape $(S, \frac{d_k}{H})$, are derived, as detailed in Equation \ref{eq:attentionscore}.
+To calculate the attention score for tokens in a particular head, $Q$ and $K$ are multiplied together, scaled by the factor $\frac{1}{\sqrt{d_k}}$, and passed through a softmax function. The resulting matrix, $softmax\left(\frac{Q K^T}{\sqrt{d_k}}\right)$, having dimensions $(\frac{d_k}{H}, \frac{d_k}{H})$, represents the attention scores between all token pairs within that head. By multiplying this scores with $V$, the attention values, $\operatorname{Attention}(Q, K, V)$, of shape $(S, \frac{d_k}{H})$, are derived, as detailed in Equation \ref{eq:attentionscore}.
  
 After obtaining the attention values for every head, they are concatenated to form the dimension $(S, d_k)$. This output is then passed through a feed-forward network to yield the final output of the Multi-Head Attention block.
 
@@ -162,7 +162,7 @@ The Transformer Encoder, on the right side of the figure, is composed of $L$ con
     \label{fig:structurestimesformer}
 \end{figure}
 
-Adapting the image transformer to process videos introduces a critical challenge: computational expense. Unlike images, videos inherently possess a spatio-temporal nature, adding an additional dimension, which exponentially increases the size of input data. This complexity makes it computationally intensive to implement an attention mechanism across all patches split from all frames within a video.
+Adapting the image transformer to process videos presents a critical challenge: computational expense. Unlike images, videos inherently possess a spatio-temporal nature, adding an additional dimension, which exponentially increases the size of input data. This complexity makes it computationally intensive to implement an attention mechanism across all patches split from all frames within a video.
 
 To address this challenge, TimeSformer introduces an innovative approach to managing the spatio-temporal dynamics of videos. Rather than directly applying the attention mechanism to both spatial and temporal dimensions, the model investigates five different space-time attention strategies. As illustrated in Figure \ref{fig:structurestimesformer}, among these strategies, the Divided Space-Time Attention outperforms the others to be the most efficient and effective approach.
 
@@ -196,12 +196,12 @@ As shown in Figure \ref{fig:structureuniformerv2}, Uniformer V2 is composed of a
 
 In contrast, each Global Uniblock V2 contains a DPE layer, a Global Cross Spatial attention MHRA (C\_MHRA), and an FFN. The DPE layer and FFN has been introduced in the previous section. The core operation of C\_MHRA is cross attention. 
 
-Different from self-attention, in cross-attention, the query, key, and value are from different sequences. C\_MHRA employs the cls token, the first token of the sequence, as the query, and the subsequent patch embeddings serve as the key and value, computing the video embedding. This well-designed model has been the first model to achieve 90.0\% top-1 accuracy on the Kinetics-400 \parencite{kay2017kinetics} dataset, which is one of the most notable datasets in action recognition. As a consequence, this model is selected as the research backbone.
+Unlike self-attention, the query, key, and value are from different sequences in cross-attention. C\_MHRA employs the cls token, the first token of the sequence, as the query, and the subsequent patch embeddings serve as the key and value, computing the video embedding. This well-designed model has been the first model to achieve 90.0\% top-1 accuracy on the Kinetics-400 \parencite{kay2017kinetics} dataset \parencite{li2022uniformerv2}, a benchmark in action recognition. As a consequence, this model is selected as the research backbone.
 
 \section{Vision-Text Contrastive Learning}
 Vision-text contrastive learning has marked a significant advancement in the computer vision domain. Because these models are trained to embed visual and textual data into a shared semantic space, they are able to understand visual content in terms of human language, a well-defined knowledge system developed by humans. 
 
-This most notable example of vision-text contrastive learning is Contrastive Language-Image Pre-training (CLIP) \parencite{radford2021learning}. As it utilises a large amount of image-captioning data, including pre-existing datasets and web-crawled data, to train both an image and text encoder, they are able to encode the images and the text into a common semantic space for subsequent analyses. To adapt this to videos, InternVideo modified the visual encoder's backbone \parencite{wang2022internvideo} based on their prior work, Uniformer V2.
+This most notable example of vision-text contrastive learning is Contrastive Language-Image Pre-training (CLIP) \parencite{radford2021learning}. As it utilises a large amount of image-captioning data, including pre-existing datasets and web-crawled data, to train both an image and text encoder, it can encode the images and the text into a common semantic space for subsequent analyses. To adapt this to videos, InternVideo modified the visual encoder's backbone \parencite{wang2022internvideo} based on their prior work, Uniformer V2.
 
 Subsequent sections will explain the mechanism of CLIP in detail.
 
@@ -227,7 +227,7 @@ where $\mathbf{IE} \in \mathbb{R}^{B \times E}$ represents the image embeddings 
     InfoNCE_q = -log \frac{exp(q \cdot k_+ / \tau)}{\sum_{i=0}^{k}{exp(q \cdot k_i / \tau)}}
 \end{equation}
 
-This equation calculates the InfoNCE loss for a specific query $q$, which is the embedding of a given image, where $k_+$ denotes the positive key, meaning the correct or corresponding text for the image, and $k_i$ denotes all the keys including positive and negative Examples. 
+This equation calculates the InfoNCE loss for a specific query $q$, which is the embedding of a given image, where $k_+$ denotes the positive key, meaning the correct or corresponding text for the image, and $k_i$ denotes all the keys including both positive and negative Examples. 
 
 $\tau$ is a temperature parameter that scales the logits before applying the softmax. This parameter can adjust the smoothness of the input logits: a larger $\tau$ narrows the range of input logits, while a smaller $\tau$ increases the scale of the logits. The narrower range of input logits suggests equally calculating the loss affected by negative samples, while the amplified scale of the logits leads to the exponential marginal effect of the negative sample's logit.
 

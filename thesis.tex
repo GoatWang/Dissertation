@@ -40,7 +40,7 @@
 \school{School~of~Computer~Science}
 \faculty{Faculty~of~Engineering}
 
-\wordcount{6715}
+% \wordcount{6715}
 
 \begin{document}
 
@@ -56,17 +56,16 @@
 \begin{abstract} %TODO: finish it
 % Abstract should be not more than 300 words, for either MSc or PhD.
 
-This research discusses the solutions to two significant challenges for animal action recognition: the long-tail issue and the temporal redundancy problem. The CLIP model, paired with text prompt engineering, is investigated as a potential solution for the long-tail problem. Simultaneously, the AFRICAN approach is introduced to handle the temporal redundancy problem. By integrating CLIP into AFRICAN, this augmented model outperforms the baseline model with 24.53\% mAP for all classes, 10.83\% mAP for the head classes, 26.98\% for mAP for the middle classes, and 22.66\% mAP for the tail classes. 
-
+This research discusses the solutions to two significant challenges for animal action recognition: the long-tail issue and the temporal redundancy problem. The CLIP model, paired with text prompt engineering, is investigated as a potential solution for the long-tail problem. Simultaneously, the AFRICAN approach is introduced to handle the temporal redundancy problem. By integrating CLIP into AFRICAN, this augmented model outperforms the baseline model with 24.53\% overall mAP for all classes.
 
 The primary contributions of this research are:
 
 \begin{itemize}
     \item Comprehensive investigation into the challenges associated with the long-tail and temporal redundancy issues in action recognition tasks.
-    \item Exploration of the CLIP model with text prompt engineering as a solution for the long-tail issue, converting the traditional one-hot encoding learning target to class embedding, thus enhancing the model's performance, especially for middle and tail classes.
+    \item Exploration of the CLIP model combined with text prompt engineering as a solution for the long-tail issue. This approach converts the traditional one-hot encoding learning target to class embedding, enhancing the model's performance, especially for middle and tail classes.
     \item Introduction of AFRICAN, a novel method leveraging the contrastive learning framework, to focus on the subtle and fine-grained differences between video frames, addressing the temporal redundancy issue effectively.
     \item Extensive experimentation, as detailed from page 27 onwards, demonstrating the efficacy of the CLIP model with text prompt engineering and AFRICAN in addressing their respective challenges.
-    \item A comparative analysis and discussion on the performance of ImageCLIP versus VideoCLIP, coupled with insights into why MSQNet excels over AFRICAN.
+    \item A comparative discussion on the performance of ImageCLIP versus VideoCLIP, coupled with insights into why the state-of-the-art model, MSQNet, excels over AFRICAN.
 \end{itemize}
 \end{abstract}
 
@@ -76,7 +75,7 @@ The primary contributions of this research are:
 % \end{dedication}
 
 \begin{acknowledgements}
-It is common practice (although totally optional) to acknowledge any third-party advice, contribution or influence you have found useful during your work. Examples include support from friends or family, the input of your Supervisor and/or Advisor, external organisations or persons who have supplied resources of some kind (e.g., funding, advice or time), and so on.
+I would like to express my sincere thanks to my principal supervisor, Prof. Majid Mirmehdi, for his guidance on this research journey. To Mr. Otto Brookes, co-supervisor of this dissertation, I extend my thanks for your invaluable insights, constructive comments, and kind encouragement. Your expertise in computer vision greatly enriched the depth of my research.
 \end{acknowledgements}
 
 \begin{declaration}

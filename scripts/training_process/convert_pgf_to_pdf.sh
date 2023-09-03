@@ -20,6 +20,8 @@ echo tmp.tex
 pdflatex tmp.tex > cvert.log
 mv tmp.pdf $filename.pdf
 
+echo $filename.pdf
+
 # # Convert using imagick
 # convert -density 500 -units pixelsperinch tmp.pdf $filename.png
 

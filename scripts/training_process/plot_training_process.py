@@ -10,7 +10,7 @@ matplotlib.rcParams.update({
     'pgf.rcfonts': False,
 })
 
-def plot_progress(df, n_rows, title, xaxis, yaxis, xlabel, ylabel, legend=True, fig_fp=None, figsize=(7, 4)):
+def plot_progress(df, n_rows, title, xaxis, yaxis, xlabel, ylabel, legend=True, fig_fp=None, figsize=(7, 4), legend_loc="lower right"):
     assert type(yaxis) is list, "xaxis should be list type"
 
     df = df.loc[:n_rows]
@@ -26,7 +26,7 @@ def plot_progress(df, n_rows, title, xaxis, yaxis, xlabel, ylabel, legend=True, 
     plt.ylabel(ylabel, size=16)
     plt.grid(True)
     if legend:
-        plt.legend(loc="lower right")
+        plt.legend(loc=legend_loc)
 
     if fig_fp is None:
         fig_fp = os.path.join(os.path.dirname(__file__), "output", "training_progress.png")
@@ -51,10 +51,10 @@ if __name__ == "__main__":
     # fig_fp = os.path.join(save_dir, "AblationVC.png")
     # plot_progress(df, n_rows=70, title=None, xaxis='epoch', yaxis=["VC_Vision", "VC_Proj", "IC", "VC_AT", "VC_DF"], xlabel='Epoch', ylabel='mAP', fig_fp=fig_fp)
 
-    for segment in ['0_overall', '1_head', '2_middle', '3_tail']:
-        df = pd.read_csv("data/4_4_finalscore_" + segment + ".csv")
-        fig_fp = os.path.join(save_dir, "4_4_finalscore_" + segment + ".png")
-        plot_progress(df, n_rows=40, title=None, xaxis='epoch', yaxis=['IC', 'AFRICAN-AR'], xlabel='Epoch', ylabel='mAP', fig_fp=fig_fp, figsize=(6, 4))
+    # for segment in ['0_overall', '1_head', '2_middle', '3_tail']:
+    #     df = pd.read_csv("data/4_4_finalscore_" + segment + ".csv")
+    #     fig_fp = os.path.join(save_dir, "4_4_finalscore_" + segment + ".png")
+    #     plot_progress(df, n_rows=40, title=None, xaxis='epoch', yaxis=['IC', 'AFRICAN-AR'], xlabel='Epoch', ylabel='mAP', fig_fp=fig_fp, figsize=(6, 4))
 
     # df = pd.read_csv("data/AFRICANPretraining.csv")
     # fig_fp = os.path.join(save_dir, "AFRICANPretraining.png")
@@ -63,6 +63,11 @@ if __name__ == "__main__":
     # df = pd.read_csv("data/VCBatchSize.csv")
     # fig_fp = os.path.join(save_dir, "7_1_VCBatchSize.png")
     # plot_progress(df, n_rows=40, title=None, xaxis='epoch', yaxis=['VC_AT_bs16', 'VC_AT_bs128'], xlabel='Epoch', ylabel='mAP', fig_fp=fig_fp)
+
+
+    df = pd.read_csv("data/5_2_MSQ_reproduce.csv")
+    fig_fp = os.path.join(save_dir, "5_2_MSQ_reproduce.png")
+    plot_progress(df, n_rows=30, title=None, xaxis='epoch', yaxis=["MSQ_TS_LLE", "MSQ_VCVision_LLE", "MSQ_VCDF_LLE", "VC_DF"], xlabel='Epoch', ylabel='mAP', fig_fp=fig_fp, legend_loc='upper left')
 
 
 # BackboneSelection

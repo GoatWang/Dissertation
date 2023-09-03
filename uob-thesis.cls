@@ -194,7 +194,7 @@
 
 \defpairofpagestyles[plain.scrheadings]{titlepage}{
   \cfoot[]{}
-  \ofoot*{\normalfont Word count: \the\@wordcount}
+  % \ofoot*{\normalfont Word count: \the\@wordcount}
 }
 % \renewcommand*{\titlepagestyle}{titlepage}
 \titlehead{\thispagestyle{titlepage} \recalctypearea}

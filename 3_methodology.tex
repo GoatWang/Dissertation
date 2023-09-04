@@ -1,4 +1,4 @@
-In this section, the use of CLIP with prompt engineering for animal action recognition is explored to address the long-tail issue, while AFRICAN is introduced as a solution for temporal redundancy. 
+In this section, the use of CLIP with prompt engineering for animal action recognition is explored to address the long-tail issue, while AFRICAN is introduced as a solution for temporal redundancy problem. 
 
 \section{CLIP with Prompt Engineering}
 
@@ -24,7 +24,7 @@ Two model structures are employed to assess action recognition performance:
 
 Both models utilise CLIP and prompt engineering for action recognition, using videos and text prompts as input. The prompt template "A video of an animal <action>. This action is a kind of <category of action> behaviour." is used to generate the prompts for producing class embeddings. As shown in Figure \ref{fig:1_2_ClassEmbeddingInternVideo}, this approach can produce meaningful distributed class embeddings.
 
-Before training begins, to accelerate the process, class embeddings of dimensions $(C, W)$ are pre-calculated using a text encoder pretrained by InternVideo. This is based on the prompt template, action name, and category, where $C$ is the number of classes and $W$ is the embedding length. This is pre-calculated since the text encoder is frozen, and the weights are not updated. 
+Before training begins, to accelerate the process, class embeddings of dimensions $(C, W)$ are pre-calculated using a text encoder pretrained by InternVideo, where $C$ is the number of classes and $W$ is the embedding length. This is pre-calculated based on the prompt template, action name, and category since the text encoder is frozen and the weights are not updated during training.
 
 Figure \ref{fig:modelstructure_vc} displays the model structure of VideoCLIP. To evaluate the structure fairly, two configurations are experimented with on this structure: VideoCLIP trained on all visual layers, and VideoCLIP trained solely on projection layers. Figure \ref{fig:modelstructure_ic} shows the model structure of ImageCLIP. To encode the set of 8 frames into video embeddings, 8 image embeddings produced by the image encoder of ImageCLIP are further passed through a 12-layer transformer followed by a pooling layer to produce a W-dimensional video embedding.
 

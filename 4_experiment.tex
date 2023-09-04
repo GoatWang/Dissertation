@@ -3,10 +3,10 @@ In this section, the effectiveness of CLIP with prompt engineering for the long-
 \section {Existing Models}
 The Animal Kingdom dataset proposed its own model, Collaborative Action Recognition (CARe), for action recognition, which is used as the baseline model in this research. It achieves 30.55\% mAP for all classes, 63.33\% mAP for head classes, 38.62\% mAP for middle classes, and 25.09\% mAP for tail classes. This model is mainly used as the baseline for animal action recognition in this research.
 
-MSQNet was proposed one month before this research and achieved the state-of-the-art result on this dataset. To fairly compare MSQNet \parencite{mondal2023msqnet} and AFRICAN proposed in this research. we use the score of MSQNet trained on videos sampled with 8 frames, which is 67.74\% mAP for all classes. 
+MSQNet was proposed one month before this research and achieved state-of-the-art results on this dataset. To fairly compare MSQNet \parencite{mondal2023msqnet} with AFRICAN proposed in this research, we use the score of MSQNet trained on videos sampled with 8 frames, achieving 67.74\% overall mAP for all classes. 
 
 \section{CLIP with Prompt Engineering}
-Before addressing the long-tail issue experimentally, a preliminary decision needs to be made regarding the selection between VideoCLIP and ImageCLIP as the backbone for action recognition. Subsequently, an assessment is conducted to evaluate the effectiveness of CLIP in mitigating the long-tail issue.
+Before experimentally addressing the long-tail issue, a preliminary decision needs to be made regarding the selection between VideoCLIP and ImageCLIP as the backbone for action recognition. Subsequently, an assessment is conducted to evaluate the effectiveness of CLIP in mitigating the long-tail issue.
 
 \subsection{VideoCLIP or ImageCLIP?}
 \label{sec:imageclipbetter}
@@ -15,21 +15,21 @@ To make this decision, three model settings are tested:
 \begin{enumerate}
     \item \textbf{VC\_Vision}: VideoCLIP with vision layers learnable, as illustrated in Figure \ref{fig:modelstructure_vc} with a learnable video encoder.
     \item \textbf{VC\_Proj}: VideoCLIP with only projection layers learnable, as illustrated in Figure \ref{fig:modelstructure_vc} with a frozen video encoder.
-    \item \textbf{IC}: Image CLIP trained on post-transformer layers, as illustrated in Figure \ref{fig:modelstructure_ic} with a frozen image encoder.
+    \item \textbf{IC}: ImageCLIP trained on post-transformer layers, as illustrated in Figure \ref{fig:modelstructure_ic} with a frozen image encoder.
 \end{enumerate}
 
-For all three experiments, the models are trained for 80 epochs on a single A100 GPU, using a binary cross-entropy loss function, the adamw optimizer, and a learning rate of 0.00015. The VC\_Vision model employs a batch size of 16 due to memory constraints, while batch sizes of 128 are used for the VC\_Proj and IC models. In accordance with Animal Kingdom settings as referenced from \parencite{ng2022animal}, evaluation metrics for this task include the mean Average Precision (mAP) on the overall, head, middle, and tail classes, as provided by the dataset. 
+For all three experiments, the models are trained for 80 epochs on a single A100 GPU using a binary cross-entropy loss function, the adamw optimizer, and a learning rate of 0.00015. The VC\_Vision model employs a batch size of 16 due to memory constraints, while batch sizes of 128 are used for the VC\_Proj and IC models. In accordance with Animal Kingdom settings as referenced from \parencite{ng2022animal}, evaluation metrics for this task include the mean Average Precision (mAP) on the overall, head, middle, and tail classes, as provided by the dataset. 
 
 % TODO
-%The effect of batch size for Video CLIP will be further discussed in Section \ref{sec:discussion_bs}.
+%The effect of batch size for VideoCLIP will be further discussed in Section \ref{sec:discussion_bs}.
 
-The performance on each epoch during the training process is illustrated in Figure \ref{fig:tp_backbone}. As the results are still improving slightly, the performance of Epoch 80 is chosen for comparison. 
+The performance on each epoch during the training process is illustrated in Figure \ref{fig:tp_backbone}. As the results are still improving slightly, the performance of the final epoch, Epoch 80, is selected for comparison. 
 
-The results of the three experiments are shown in Table \ref{tab:resultsbackbone}. As illustrated in Figure \ref{fig:tp_backbone}, the IC model significantly outperforms the other two models. Specifically, the VC\_vision model achieves a 27.19\% mAP on the overall dataset, which is the lowest among all experiments. The VC\_Proj model achieves a 49.86\% mAP on the overall dataset, making it the second lowest. In contrast, the IC model achieves a 54.79\% mAP on the overall dataset, the highest among all the other experiments. Although both the IC and VC\_Proj models outperform the baseline model, CARe, which records a 30.55\% mAP on the overall dataset, the IC model surpasses the VC\_Proj model by 4.81\% mAP. Consequently, the IC model is chosen for subsequent experiments. A detailed discussion regarding the performance of Image CLIP and Video CLIP can be found in Section \ref{sec:discussion_vc}.
+The results of the three experiments are shown in Table \ref{tab:resultsbackbone}. As illustrated in Figure \ref{fig:tp_backbone}, the IC model significantly outperforms the other two models. Specifically, the VC\_vision model achieves a 27.19\% mAP on the overall dataset, which is the lowest among all experiments. The VC\_Proj model achieves a 49.86\% mAP on the overall dataset, making it the second lowest. In contrast, the IC model achieves a 54.79\% mAP on the overall dataset, the highest among all the other experiments. Although both the IC and VC\_Proj models outperform the baseline model, CARe, which records a 30.55\% mAP on the overall dataset, the IC model surpasses the VC\_Proj model by 4.81\% mAP. Consequently, the IC model is chosen for subsequent experiments. A detailed discussion regarding the performance of ImageCLIP and VideoCLIP can be found in Section \ref{sec:discussion_vc}.
 
 \begin{table}[ht]
     \centering
-    \caption[Training Results for Visual Encoder Selection on Epoch 80]{The table shows the training result of VC\_Vision, VC\_Proj, and IC on Epoch 80. \textbf{VC\_Vision} is VideoCLIP with vision layers learnable, as illustrated in Figure \ref{fig:modelstructure_vc} with a learnable video encoder. \textbf{VC\_Proj} is VideoCLIP with only projection layers learnable, as illustrated in Figure \ref{fig:modelstructure_vc} with a frozen video encoder. \textbf{IC} is Image CLIP trained on post-transformer layers, as illustrated in Figure \ref{fig:modelstructure_ic} with a frozen image encoder.}
+    \caption[Training Results for Visual Encoder Selection on Epoch 80]{The table shows the training result of VC\_Vision, VC\_Proj, and IC on Epoch 80. \textbf{VC\_Vision} is VideoCLIP with vision layers learnable, as illustrated in Figure \ref{fig:modelstructure_vc} with a learnable video encoder. \textbf{VC\_Proj} is VideoCLIP with only projection layers learnable, as illustrated in Figure \ref{fig:modelstructure_vc} with a frozen video encoder. \textbf{IC} is ImageCLIP trained on post-transformer layers, as illustrated in Figure \ref{fig:modelstructure_ic} with a frozen image encoder.}
     \label{tab:resultsbackbone}
     \begin{tabular}{lllll}
         \toprule
@@ -49,25 +49,25 @@ The results of the three experiments are shown in Table \ref{tab:resultsbackbone
     \centering
     % \includegraphics[width=1.0\textwidth]{assets/charts/4_1_BackboneSelection.pgf}
     \resizebox{1.0\textwidth}{!}{\input{"assets/charts/4_1_BackboneSelection.pgf"}}
-    \caption[mAP of VC\_Vision, VC\_Proj, and IC on each Epoch]{This chart illustrates the mAP of VC\_Vision, VC\_Proj, and IC on each epoch. \textbf{VC\_Vision} is VideoCLIP with vision layers learnable, as illustrated in Figure \ref{fig:modelstructure_vc} with a learnable video encoder. \textbf{VC\_Proj} is VideoCLIP with only projection layers learnable, as illustrated in Figure \ref{fig:modelstructure_vc} with a frozen video encoder. \textbf{IC} is Image CLIP trained on post-transformer layers, as illustrated in Figure \ref{fig:modelstructure_ic} with a frozen image encoder.}
+    \caption[mAP of VC\_Vision, VC\_Proj, and IC on each Epoch]{This chart illustrates the mAP of VC\_Vision, VC\_Proj, and IC on each epoch. \textbf{VC\_Vision} is VideoCLIP with vision layers learnable, as illustrated in Figure \ref{fig:modelstructure_vc} with a learnable video encoder. \textbf{VC\_Proj} is VideoCLIP with only projection layers learnable, as illustrated in Figure \ref{fig:modelstructure_vc} with a frozen video encoder. \textbf{IC} is ImageCLIP trained on post-transformer layers, as illustrated in Figure \ref{fig:modelstructure_ic} with a frozen image encoder.}
     \label{fig:tp_backbone}
 \end{figure}
 
 \subsection{Does Text Embedding Help with the Long-Tail Issue?}
-In this experiment, an investigation will be conducted into whether the utilization of text embedding assists in addressing the long-tail issue. This can be done by comparing the performance of each segment of the IC and CARe models. The IC model aims to output a class embedding as its learning target, while the CARe model outputs one-hot encoding results. From Figure \ref{fig:tp_longtailcomp}, it is evident that the majority of the performance improvement comes from the middle and tail classes. The performance improvement in the head classes is only 6.2\%, while the progress in the middle and tail classes are 21.9\% and 20.7\%, respectively. This result indicates that text embedding does indeed help with the long-tail issue. 
+In this experiment, an investigation will be conducted into whether the utilization of text embedding assists in addressing the long-tail issue. This can be done by comparing the performance of each segment of the IC and CARe models. The IC model aims to output a class embedding as its learning target, while the CARe model outputs one-hot encoding results. From Figure \ref{fig:tp_longtailcomp}, it is evident that the majority of the performance improvement comes from the middle and tail classes. The performance improvement in the head classes is only 6.2\%, while the progress in the middle and tail classes are 21.9\% and 20.7\%, respectively. This result suggests that text embedding effectively addresses the long-tail issue. 
 
 \begin{figure}[ht]
     \centering
     \resizebox{0.75\textwidth}{!}{\input{"assets/charts/4_2_LongTailResultComparison.pgf"}}
-    \caption[mAP Performance Differences between CARe and IC on each Segment]{This chart illustrates the mAP performance differences between CARe and IC on each segment. \textbf{CARe}, proposed by Animal Kingdom \parencite{ng2022animal}, is used as the baseline model in this research. \textbf{IC} is Image CLIP trained on post-transformer layers, as illustrated in Figure \ref{fig:modelstructure_ic} with a frozen image encoder.}
+    \caption[mAP Performance Differences between CARe and IC on each Segment]{This chart illustrates the mAP performance differences between CARe and IC on each segment. \textbf{CARe}, proposed by Animal Kingdom \parencite{ng2022animal}, is used as the baseline model in this research. \textbf{IC} is ImageCLIP trained on post-transformer layers, as illustrated in Figure \ref{fig:modelstructure_ic} with a frozen image encoder.}
     \label{fig:tp_longtailcomp}
 \end{figure}
 
 % In addition, to investigate further. I experiment with the following two model settings: 
 
 % \begin{enumerate}
-%     \item IC: Image Clip with learning target of class embedding
-%     \item IC\_onehot: Image Clip with learning target of one-hot encoding
+%     \item IC: ImageCLIP with learning target of class embedding
+%     \item IC\_onehot: ImageCLIP with learning target of one-hot encoding
 % \end{enumerate}
 
 \section{AFRICAN}
@@ -78,14 +78,14 @@ To evaluate the influence of AFRICAN pretraining, a comparison is made between t
 
 \begin{enumerate}
     \item \textbf{w/o-AFRICAN}: CLIP model without AFRICAN pretraining.
-    \item \textbf{with-AFRICAN}: CLIP model with AFRICAN pertaining.
+    \item \textbf{with-AFRICAN}: CLIP model with AFRICAN pretraining.
 \end{enumerate}
 
 Results are presented in Table \ref{tab:africanpretrainingresults} and the epoch-wise performance is visualized in Figure \ref{fig:tp_africanpretraining}. The findings suggest that the model is able to distinguish the identity source of augmented images with almost 80\% accuracy. 
 
 \begin{table}[ht]
     \centering
-    \caption[Training Results for AFRICAN at Pretraining stage]{The Table shows the training results for AFRICAN at the pretraining stage. \textbf{w/o-AFRICAN} represents the CLIP model without AFRICAN pertaining, while \textbf{with-AFRICAN} represents the CLIP model with AFRICAN pretraining.
+    \caption[Training Results for AFRICAN at Pretraining stage]{The Table shows the training results for AFRICAN at the pretraining stage. \textbf{w/o-AFRICAN} represents the CLIP model without AFRICAN pretraining, while \textbf{with-AFRICAN} represents the CLIP model with AFRICAN pretraining.
 }
     \label{tab:africanpretrainingresults}
     \begin{tabular}{lllll}
@@ -107,12 +107,12 @@ Results are presented in Table \ref{tab:africanpretrainingresults} and the epoch
     \label{fig:tp_africanpretraining}
 \end{figure}
 
-To gain deeper insights, the attention maps of the vision transformer (ViT) within the model are employed. Thanks to the transformer's query-key-value mechanism, these maps can be computed by accumulating the connection weights between the keys and queries across all layers. This approach helps highlight the most frequently queried keys and identify the patches that heavily influence the final output. The attention maps using this method on different videos are shown in Figures \ref{fig:attnmap1}, \ref{fig:attnmap2}, \ref{fig:attnmap3} and \ref{fig:attnmap4}. Figures \ref{fig:attnmap1}, \ref{fig:attnmap2}, \ref{fig:attnmap3} show examples that the with-AFRICAN model performs better than w/o-AFRICAN model, while Figure \ref{fig:attnmap4} shows the that both models are not able to capture important features from the video. To conclude,  with-AFRICAN sometimes can capture more key features than w/o-AFRICAN, which may benefit the downstream action recognition task.
+To gain deeper insights, the attention maps of the vision transformer (ViT) within the model are employed. Thanks to the transformer's query-key-value mechanism, these maps can be computed by accumulating the connection weights between the keys and queries across all layers. This approach helps highlight the most frequently queried keys and identify the patches that heavily influence the final output. The attention maps using this method on different videos are shown in Figures \ref{fig:attnmap1}, \ref{fig:attnmap2}, \ref{fig:attnmap3} and \ref{fig:attnmap4}. Figures \ref{fig:attnmap1}, \ref{fig:attnmap2}, and \ref{fig:attnmap3} show examples where the with-AFRICAN model outperforms the w/o-AFRICAN model. Conversely, Figure \ref{fig:attnmap4} demonstrates that neither model captures significant features from the video effectively. To conclude,  with-AFRICAN sometimes can capture more key features than w/o-AFRICAN, which may benefit the downstream action recognition task.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=1.0\textwidth]{assets/charts/4_5_AttentionMaps_1}
-    \caption[Attention Map 1 (Good examples)]{The examples of attention map on two videos that with-AFRICAN outperform w/o-AFRICAN. The first row is the input video, the second row is the attention map of w/o-AFRICAN, and the third row is the attention map of with-AFRICAN. w/o-AFRICAN represents the CLIP model without AFRICAN pertaining, while with-AFRICAN represents the CLIP model with AFRICAN pretraining.}
+    \caption[Attention Map 1 (Good examples)]{The examples of attention map on two videos that with-AFRICAN outperform w/o-AFRICAN. The first row is the input video, the second row is the attention map of w/o-AFRICAN, and the third row is the attention map of with-AFRICAN. w/o-AFRICAN represents the CLIP model without AFRICAN pretraining, while with-AFRICAN represents the CLIP model with AFRICAN pretraining.}
     \label{fig:attnmap1}
 \end{figure}
 
@@ -133,17 +133,15 @@ To gain deeper insights, the attention maps of the vision transformer (ViT) with
 \begin{figure}[ht]
     \centering
     \includegraphics[width=1.0\textwidth]{assets/charts/4_5_AttentionMaps_4}
-    \caption[Attention Map 4 (Bad examples)]{The examples of attention map on two videos that both model does not perform well. The first row is the input video, the second row is the attention map of w/o-AFRICAN, and the third row is the attention map of with-AFRICAN. w/o-AFRICAN represents the CLIP model without AFRICAN pertaining, while with-AFRICAN represents the CLIP model with AFRICAN pretraining.}
+    \caption[Attention Map 4 (Bad examples)]{The examples of attention map on two videos that both model does not perform well. The first row is the input video, the second row is the attention map of w/o-AFRICAN, and the third row is the attention map of with-AFRICAN. w/o-AFRICAN represents the CLIP model without AFRICAN pretraining, while with-AFRICAN represents the CLIP model with AFRICAN pretraining.}
     \label{fig:attnmap4}
 \end{figure}
 
 
 
 
-
-
 \subsection{Action Recognition Stage}
-The model for action recognition, denoted as AFRICAN-AR, is illustrated in Figure \ref{fig:modelstructaf_ar}. This model is trained with a Focal Loss and the adamw optimizer using a learning rate of 0.00015 on a single A100 GPU. As the video clip module of InterVideo takes longer to converge illustrated in Figure \ref{fig:tp_backbone} where the IC model does not improve after 40 epochs, all models in this experiment are trained for 40 epochs. The mAP is used as the evaluation metric for this task.
+The model for action recognition, denoted as AFRICAN-AR, is illustrated in Figure \ref{fig:modelstructaf_ar}. This model is trained with a Focal Loss and the adamw optimizer using a learning rate of 0.00015 on a single A100 GPU. As the VideoCLIP module of InterVideo takes longer to converge illustrated in Figure \ref{fig:tp_backbone} where the IC model does not improve after 40 epochs, all models in this experiment are trained for 40 epochs. The mAP is used as the evaluation metric for this task.
 
 Figure \ref{fig:final_result} illustrates the performance of IC and AFRICAN-AR. It is obvious that AFRICAN-AR outperforms in the Head and Middle classes, but performs equally with the IC in the Tail classes. Considering the larger variance of performance of IC in Tail classes, I pick epoch 40, where they have very close mAP, to evaluate the two models fairly.
 
@@ -175,7 +173,7 @@ The results for action recognition at Epoch 40 are presented in Table \ref{tab:a
         \caption{Tail Classes Performance}
         \label{fig:subfig4}
     \end{subfigure}
-    \caption[The Performance of IC and AFRICAN-AR on each Epoch for Different Segments]{This figure illustrates The Performance of IC and AFRICAN-AR on each Epoch for Different Segments. \textbf{IC} represents Image CLIP trained on post-transformer layers, as illustrated in Figure \ref{fig:modelstructure_ic} with a frozen image encoder, while \textbf{AFRICAN-AR} use the same structure as IC but with AFRICAN pretrained weights, as illustrated in Figure \ref{fig:modelstructaf_ar}}
+    \caption[The Performance of IC and AFRICAN-AR on each Epoch for Different Segments]{This figure illustrates The Performance of IC and AFRICAN-AR on each Epoch for Different Segments. \textbf{IC} represents ImageCLIP trained on post-transformer layers, as illustrated in Figure \ref{fig:modelstructure_ic} with a frozen image encoder, while \textbf{AFRICAN-AR} use the same structure as IC but with AFRICAN pretrained weights, as illustrated in Figure \ref{fig:modelstructaf_ar}}
     \label{fig:final_result}
     
 \end{adjustwidth}
@@ -185,7 +183,7 @@ The results for action recognition at Epoch 40 are presented in Table \ref{tab:a
 
 \begin{table}[ht]
     \centering
-    \caption[Results of action recognition (Epoch 40)]{The Table shows the results of action recognition on Epoch 40. \textbf{IC} represents Image CLIP trained on post-transformer layers, as illustrated in Figure \ref{fig:modelstructure_ic} with a frozen image encoder, while \textbf{AFRICAN-AR} uses the same structure as IC but with AFRICAN pretrained weights, as illustrated in Figure \ref{fig:modelstructaf_ar}}
+    \caption[Results of action recognition (Epoch 40)]{The Table shows the results of action recognition on Epoch 40. \textbf{IC} represents ImageCLIP trained on post-transformer layers, as illustrated in Figure \ref{fig:modelstructure_ic} with a frozen image encoder, while \textbf{AFRICAN-AR} uses the same structure as IC but with AFRICAN pretrained weights, as illustrated in Figure \ref{fig:modelstructaf_ar}}
     \label{tab:allresults40}
     \begin{tabular}{lllll}
         \toprule
@@ -205,7 +203,7 @@ When comparing the AFRICAN-AR model with the baseline model, CARe, AFRICAN-AR co
 
 \begin{table}[ht]
     \centering
-    \caption[Results of action recognition (Best Epoch)]{The table shows the results of CARe, IC, AFRICAN-AR, and MSQNet for action recognition. \textbf{CARe} is proposed by Animal Kingdom \parencite{ng2022animal} and used as the baseline model in this research. \textbf{IC} represents Image CLIP trained on post-transformer layers, as illustrated in Figure \ref{fig:modelstructure_ic} with a frozen image encoder. \textbf{AFRICAN-AR} uses the same structure as IC but with AFRICAN pretrained weights, as illustrated in Figure \ref{fig:modelstructaf_ar}. \textbf{MSQNet} is the state-of-the-art model for action recognition on the Animal Kingdom dataset.}
+    \caption[Results of action recognition (Best Epoch)]{The table shows the results of CARe, IC, AFRICAN-AR, and MSQNet for action recognition. \textbf{CARe} is proposed by Animal Kingdom \parencite{ng2022animal} and used as the baseline model in this research. \textbf{IC} represents ImageCLIP trained on post-transformer layers, as illustrated in Figure \ref{fig:modelstructure_ic} with a frozen image encoder. \textbf{AFRICAN-AR} uses the same structure as IC but with AFRICAN pretrained weights, as illustrated in Figure \ref{fig:modelstructaf_ar}. \textbf{MSQNet} is the state-of-the-art model for action recognition on the Animal Kingdom dataset.}
     \label{tab:allresultsbest}
     
     \begin{tabular}{lllll}

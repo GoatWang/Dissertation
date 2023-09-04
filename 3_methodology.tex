@@ -31,7 +31,7 @@ Figure \ref{fig:modelstructure_vc} displays the model structure of VideoCLIP. To
 Given that this is a multilabel classification task, meaning that a video might belong to more than one class, an additional linear layer is added as a buffer to help the model fit better. Finally, the output logits of the linear layer are then processed through a sigmoid function to estimate the likelihood of each class.
 
 \section{AFRICAN}
-The whole AFRICAN consists of two stages: the pretraining stage and the action recognition stage. The pretraining stage is to train the model to distinguish whether two images are augmented from the same frame in a video or not. At the action recognition stage, the pretrained AFRICAN image encoder is applied to extract the embeddings for action recognition. 
+The AFRICAN approach consists of two stages: the pretraining stage and the action recognition stage. The pretraining stage is to train the model to distinguish whether two images are augmented from the same frame in a video or not. At the action recognition stage, the pretrained AFRICAN image encoder is applied to extract the embeddings. 
 
 \subsection{Pretraining Stage}
 
@@ -42,7 +42,7 @@ The whole AFRICAN consists of two stages: the pretraining stage and the action r
 f\label{fig:modelstructafsim}
 \end{figure}
 
-During the pretraining stage, AFRICAN applies contrastive learning techniques to distinguish whether two images are augmented from the same frame in a video or not. Figure \ref{fig:modelstructafsim} illustrates the batch operation of the model, which aligns with Figure \ref{fig:cliplossstructure} except for the input data. The input for forwarding, denoted by $x_i$, represents the $i$-th video sample in the dataset. $x_i$ is then copied twice into $x_{i1}$ and $x_{i2}$, each of which independently passes through the same video augmentation function $aug(\cdot)$ with different random states, as expressed in Equations \ref{eq:aug1} and \ref{eq:aug2}. 
+During the pretraining stage, AFRICAN applies contrastive learning techniques to distinguish whether two images are augmented from the same frame in a video or not. Figure \ref{fig:modelstructafsim} illustrates the batch operation of the model, which aligns with Figure \ref{fig:cliplossstructure} except for the input data. The input, denoted by $x_i$, represents the $i$-th video sample in the dataset. $x_i$ is then copied twice into $x_{i1}$ and $x_{i2}$, each of which independently passes through the same video augmentation function $aug(\cdot)$ with different random states, as expressed in Equations \ref{eq:aug1} and \ref{eq:aug2}. 
 
 \begin{equation}
     \label{eq:aug1}
@@ -89,4 +89,4 @@ Within the pretrained CLIP stream, both the visual encoder and class embedding a
 
 Contrastingly, within the pretrained AFRICAN stream, while the structure of the visual encoder is the same as those in the pretrained CLIP stream, it employs weights pretrained by AFRICAN. Given that AFRICAN is not pretrained by the vision-text multimodal model like CLIP, there is no corresponding class embedding. Therefore, a commonly used structure, the multilayer perceptron (MLP), is employed to map the embedding and one-hot encoding. The 3-layer MLP takes the video embedding as input and outputs 140-dimensional logits, which are then passed through a sigmoid function for classification.
 
-After the logits, the input of the sigmoid function, are obtained in the two streams, they are used separately for prediction and computation of loss1 and loss2. Simultaneously, the logits of both streams are multiplied by W1 and W2, two 140-dimensional weights, respectively to determine the contributions of each class for both streams. This is followed by an addition to produce the final prediction and computation of loss3. Finally, loss1, loss2, and loss3 are added together to do the backpropagation. 
+After the logits, the input of the sigmoid function, are obtained in the two streams, they are used separately for prediction and computation of loss1 and loss2. Simultaneously, the logits of both streams are multiplied by W1 and W2, two 140-dimensional weights, respectively to determine the contributions of each class for both streams. This is followed by an addition to produce the final prediction and computation of loss3. Finally, loss1, loss2, and loss3 are summed for backpropagation. 

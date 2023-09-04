@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
     df = pd.read_csv("data/5_2_MSQ_reproduce.csv")
     fig_fp = os.path.join(save_dir, "5_2_MSQ_reproduce.png")
-    plot_progress(df, n_rows=30, title=None, xaxis='epoch', yaxis=["MSQ_TS_LLE", "MSQ_VCVision_LLE", "MSQ_VCDF_LLE", "VC_DF"], xlabel='Epoch', ylabel='mAP', fig_fp=fig_fp, legend_loc='upper left')
+    plot_progress(df, n_rows=30, title=None, xaxis='epoch', yaxis=["VC_DF", "MSQ_TS_LLE", "MSQ_VCVision_LLE", "MSQ_VCDF_LLE"], xlabel='Epoch', ylabel='mAP', fig_fp=fig_fp, legend_loc='upper left')
 
 
 # BackboneSelection

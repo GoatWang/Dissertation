@@ -3,7 +3,7 @@ In this section, the effectiveness of CLIP with prompt engineering for the long-
 \section {Existing Models}
 The Animal Kingdom dataset proposed its own model, Collaborative Action Recognition (CARe), for action recognition, which is used as the baseline model in this research. It achieves 30.55\% mAP for all classes, 63.33\% mAP for head classes, 38.62\% mAP for middle classes, and 25.09\% mAP for tail classes. This model is mainly used as the baseline for animal action recognition in this research.
 
-MSQNet was proposed one month before this research and achieved state-of-the-art results on this dataset. To fairly compare MSQNet \parencite{mondal2023msqnet} with AFRICAN proposed in this research, we use the score of MSQNet trained on videos sampled with 8 frames, achieving 67.74\% overall mAP for all classes. 
+MSQNet \parencite{mondal2023msqnet} was proposed one month before this research and achieved state-of-the-art results on this dataset. To fairly compare MSQNet with AFRICAN proposed in this research, we use the score of MSQNet trained on videos sampled with 8 frames, achieving 67.74\% overall mAP for all classes. 
 
 \section{CLIP with Prompt Engineering}
 Before experimentally addressing the long-tail issue, a preliminary decision needs to be made regarding the selection between VideoCLIP and ImageCLIP as the backbone for action recognition. Subsequently, an assessment is conducted to evaluate the effectiveness of CLIP in mitigating the long-tail issue.
@@ -25,7 +25,7 @@ For all three experiments, the models are trained for 80 epochs on a single A100
 
 The performance on each epoch during the training process is illustrated in Figure \ref{fig:tp_backbone}. As the results are still improving slightly, the performance of the final epoch, Epoch 80, is selected for comparison. 
 
-The results of the three experiments are shown in Table \ref{tab:resultsbackbone}. As illustrated in Figure \ref{fig:tp_backbone}, the IC model significantly outperforms the other two models. Specifically, the VC\_vision model achieves a 27.19\% mAP on the overall dataset, which is the lowest among all experiments. The VC\_Proj model achieves a 49.86\% mAP on the overall dataset, making it the second lowest. In contrast, the IC model achieves a 54.79\% mAP on the overall dataset, the highest among all the other experiments. Although both the IC and VC\_Proj models outperform the baseline model, CARe, which records a 30.55\% mAP on the overall dataset, the IC model surpasses the VC\_Proj model by 4.81\% mAP. Consequently, the IC model is chosen for subsequent experiments. A detailed discussion regarding the performance of ImageCLIP and VideoCLIP can be found in Section \ref{sec:discussion_vc}.
+The results of the three experiments are shown in Table \ref{tab:resultsbackbone}. As illustrated in Figure \ref{fig:tp_backbone}, the IC model significantly outperforms the other two models. Specifically, the VC\_vision model achieves a 27.19\% mAP on the overall dataset, which is the lowest among all experiments. The VC\_Proj model achieves a 49.82\% mAP on the overall dataset, making it the second lowest. In contrast, the IC model achieves a 53.60\% mAP on the overall dataset, the highest among all the other experiments. Although both the IC and VC\_Proj models outperform the baseline model, CARe, which records a 30.55\% mAP on the overall dataset, the IC model surpasses the VC\_Proj model by 3.78\% mAP. Consequently, the IC model is chosen for subsequent experiments. A detailed discussion regarding the performance of ImageCLIP and VideoCLIP can be found in Section \ref{sec:discussion_vc}.
 
 \begin{table}[ht]
     \centering
@@ -38,8 +38,9 @@ The results of the three experiments are shown in Table \ref{tab:resultsbackbone
         {} & Overall & Head  & Middle & Tail \\
         \midrule
         % CARe   \parencite{ng2022animal}     & 30.55   & 63.33 & 38.62 & 25.09 \\
+        CARe\parencite{ng2022animal} & 30.55 & \uuline{63.33} & 38.62 & 25.09 \\
         VC\_Vision  & 27.19   & 45.00 & 36.85 & 19.99 \\
-        VC\_Proj    & 49.82   & 59.17 & 54.93 & 46.03 \\
+        VC\_Proj    & \uuline{49.82} & 59.17 & \uuline{54.93} & \uuline{46.03} \\
         IC          & \textbf{53.60} & \textbf{71.39} & \textbf{59.98} & \textbf{47.58} \\
         \bottomrule
     \end{tabular}
@@ -54,14 +55,14 @@ The results of the three experiments are shown in Table \ref{tab:resultsbackbone
 \end{figure}
 
 \subsection{Does Text Embedding Help with the Long-Tail Issue?}
-In this experiment, an investigation will be conducted into whether the utilization of text embedding assists in addressing the long-tail issue. This can be done by comparing the performance of each segment of the IC and CARe models. The IC model aims to output a class embedding as its learning target, while the CARe model outputs one-hot encoding results. From Figure \ref{fig:tp_longtailcomp}, it is evident that the majority of the performance improvement comes from the middle and tail classes. The performance improvement in the head classes is only 6.2\%, while the progress in the middle and tail classes are 21.9\% and 20.7\%, respectively. This result suggests that text embedding effectively addresses the long-tail issue. 
+In this experiment, an investigation will be conducted into whether the utilization of text embedding assists in addressing the long-tail issue. This can be done by comparing the performance of each segment of the IC and CARe models. The IC model aims to output a class embedding as its learning target, while the CARe model outputs one-hot encoding results. From Table \ref{tab:resultsbackbone}, it is evident that the majority of the performance improvement comes from the middle and tail classes. The performance improvement in the head classes is only 8.06\% (from 63.33\% to 71.39\%), while the progress in the middle and tail classes are 21.36\% (from 38.62\% to 59.98\%) and 22.49\% (from 25.09\% to 47.58\%), respectively. This result suggests that text embedding effectively addresses the long-tail issue. 
 
-\begin{figure}[ht]
-    \centering
-    \resizebox{0.75\textwidth}{!}{\input{"assets/charts/4_2_LongTailResultComparison.pgf"}}
-    \caption[mAP Performance Differences between CARe and IC on each Segment]{This chart illustrates the mAP performance differences between CARe and IC on each segment. \textbf{CARe}, proposed by Animal Kingdom \parencite{ng2022animal}, is used as the baseline model in this research. \textbf{IC} is ImageCLIP trained on post-transformer layers, as illustrated in Figure \ref{fig:modelstructure_ic} with a frozen image encoder.}
-    \label{fig:tp_longtailcomp}
-\end{figure}
+% \begin{figure}[ht]
+%     \centering
+%     \resizebox{0.75\textwidth}{!}{\input{"assets/charts/4_2_LongTailResultComparison.pgf"}}
+%     \caption[mAP Performance Differences between CARe and IC on each Segment]{This chart illustrates the mAP performance differences between CARe and IC on each segment. \textbf{CARe}, proposed by Animal Kingdom \parencite{ng2022animal}, is used as the baseline model in this research. \textbf{IC} is ImageCLIP trained on post-transformer layers, as illustrated in Figure \ref{fig:modelstructure_ic} with a frozen image encoder.}
+%     \label{fig:tp_longtailcomp}
+% \end{figure}
 
 % In addition, to investigate further. I experiment with the following two model settings: 
 
@@ -72,7 +73,7 @@ In this experiment, an investigation will be conducted into whether the utilizat
 
 \section{AFRICAN}
 \subsection{Pretraining Stage}
-The model is trained with infoNCE \parencite{oord2019representation} loss, using the adamw optimizer with a learning rate of 0.00003. In each batch, the model processes one video as input, which is then sampled into 8 frames for embedding and similarity matrix computation. The model is trained for 50 epochs on a single NVIDIA A100 GPU. As contrastive learning can be defined as a binary classification task, accuracy serves as the evaluation metric.
+The model is trained with infoNCE \parencite{oord2019representation} loss, using the adamw optimizer with a learning rate of 0.00003. In each batch, the model processes one video as input, which is then sampled into 8 frames for embedding and similarity matrix computation. The model is trained for 50 epochs on a single NVIDIA A100 GPU. As contrastive learning can be defined as a categorical classification task, accuracy serves as the evaluation metric.
 
 To evaluate the influence of AFRICAN pretraining, a comparison is made between the following two models: 
 
@@ -107,32 +108,32 @@ Results are presented in Table \ref{tab:africanpretrainingresults} and the epoch
     \label{fig:tp_africanpretraining}
 \end{figure}
 
-To gain deeper insights, the attention maps of the vision transformer (ViT) within the model are employed. Thanks to the transformer's query-key-value mechanism, these maps can be computed by accumulating the connection weights between the keys and queries across all layers. This approach helps highlight the most frequently queried keys and identify the patches that heavily influence the final output. The attention maps using this method on different videos are shown in Figures \ref{fig:attnmap1}, \ref{fig:attnmap2}, \ref{fig:attnmap3} and \ref{fig:attnmap4}. Figures \ref{fig:attnmap1}, \ref{fig:attnmap2}, and \ref{fig:attnmap3} show examples where the with-AFRICAN model outperforms the w/o-AFRICAN model. Conversely, Figure \ref{fig:attnmap4} demonstrates that neither model captures significant features from the video effectively. To conclude,  with-AFRICAN sometimes can capture more key features than w/o-AFRICAN, which may benefit the downstream action recognition task.
+To gain deeper insights, the attention maps of the vision transformer (ViT) within the model are employed. Thanks to the transformer's query-key-value mechanism, these maps can be computed by accumulating the connection weights between the keys and queries across all layers. This approach helps highlight the most frequently queried keys and identify the patches that heavily influence the final output. The attention maps using this method on different videos are shown in Figures \ref{fig:attnmap1}, \ref{fig:attnmap3} and \ref{fig:attnmap4}. Figures \ref{fig:attnmap1} and \ref{fig:attnmap3} show examples where the with-AFRICAN model outperforms the w/o-AFRICAN model. Conversely, Figure \ref{fig:attnmap4} demonstrates that neither model captures significant features from the video effectively. To conclude,  with-AFRICAN sometimes can capture more key features than w/o-AFRICAN, which may benefit the downstream action recognition task.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=1.0\textwidth]{assets/charts/4_5_AttentionMaps_1}
+    \includegraphics[width=0.9\textwidth]{assets/charts/4_5_AttentionMaps_1}
     \caption[Attention Map 1 (Good examples)]{The examples of attention map on two videos that with-AFRICAN outperform w/o-AFRICAN. The first row is the input video, the second row is the attention map of w/o-AFRICAN, and the third row is the attention map of with-AFRICAN. w/o-AFRICAN represents the CLIP model without AFRICAN pretraining, while with-AFRICAN represents the CLIP model with AFRICAN pretraining.}
     \label{fig:attnmap1}
 \end{figure}
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=1.0\textwidth]{assets/charts/4_5_AttentionMaps_2}
-    \caption[Attention Map 2 (Good examples)]{The same as Figure \ref{fig:attnmap1} on another two videos.}
-    \label{fig:attnmap2}
-\end{figure}
+% \begin{figure}[ht]
+%     \centering
+%     \includegraphics[width=1.0\textwidth]{assets/charts/4_5_AttentionMaps_2}
+%     \caption[Attention Map 2 (Good examples)]{The same as Figure \ref{fig:attnmap1} on another two videos.}
+%     \label{fig:attnmap2}
+% \end{figure}
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=1.0\textwidth]{assets/charts/4_5_AttentionMaps_3}
+    \includegraphics[width=0.9\textwidth]{assets/charts/4_5_AttentionMaps_3}
     \caption[Attention Map 3 (Good examples)]{The same as Figure \ref{fig:attnmap1} on another two videos.}
     \label{fig:attnmap3}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=1.0\textwidth]{assets/charts/4_5_AttentionMaps_4}
+    \includegraphics[width=0.9\textwidth]{assets/charts/4_5_AttentionMaps_4}
     \caption[Attention Map 4 (Bad examples)]{The examples of attention map on two videos that both model does not perform well. The first row is the input video, the second row is the attention map of w/o-AFRICAN, and the third row is the attention map of with-AFRICAN. w/o-AFRICAN represents the CLIP model without AFRICAN pretraining, while with-AFRICAN represents the CLIP model with AFRICAN pretraining.}
     \label{fig:attnmap4}
 \end{figure}
@@ -141,11 +142,11 @@ To gain deeper insights, the attention maps of the vision transformer (ViT) with
 
 
 \subsection{Action Recognition Stage}
-The model for action recognition, denoted as AFRICAN-AR, is illustrated in Figure \ref{fig:modelstructaf_ar}. This model is trained with a Focal Loss and the adamw optimizer using a learning rate of 0.00015 on a single A100 GPU. As the VideoCLIP module of InterVideo takes longer to converge illustrated in Figure \ref{fig:tp_backbone} where the IC model does not improve after 40 epochs, all models in this experiment are trained for 40 epochs. The mAP is used as the evaluation metric for this task.
+The AFRICAN model for action recognition, denoted as AFRICAN-AR, is illustrated in Figure \ref{fig:modelstructaf_ar}. This model is trained with a Focal Loss and the adamw optimizer using a learning rate of 0.00015 on a single A100 GPU. As the VideoCLIP module of InterVideo takes longer to converge illustrated in Figure \ref{fig:tp_backbone} where the IC model does not improve after 40 epochs, all models in this experiment are trained for 40 epochs. The mAP is used as the evaluation metric for this task.
 
-Figure \ref{fig:final_result} illustrates the performance of IC and AFRICAN-AR. It is obvious that AFRICAN-AR outperforms in the Head and Middle classes, but performs equally with the IC in the Tail classes. Considering the larger variance of performance of IC in Tail classes, I pick epoch 40, where they have very close mAP, to evaluate the two models fairly.
+Figure \ref{fig:final_result} illustrates the performance of IC and AFRICAN-AR. It is obvious that AFRICAN-AR outperforms in the Head and Middle classes, but performs equally with the IC in the Tail classes. Considering the larger variance of performance of IC in tail classes, Epoch 40, where they have very close mAP in tail classes, is picked to evaluate the two models fairly. 
 
-The results for action recognition at Epoch 40 are presented in Table \ref{tab:allresults40}, and the results at the best epoch are displayed in Table \ref{tab:allresultsbest}. With the stream of pretrained AFRICAN weights, AFRICAN-AR is able to improve IC model with 1.69\% mAP and outperform other models in all measured aspects at Epoch 40, with a 54.02\% mAP on overall classes.
+The results for action recognition at Epoch 40 are presented in Table \ref{tab:allresults40}. With the stream of pretrained AFRICAN weights, AFRICAN-AR is able to improve IC model with 1.82\% (from 52.48\% to 54.30\%) overall mAP with the majority improvement on the head and middle classes.
 
 \begin{figure}
     \centering
@@ -187,19 +188,19 @@ The results for action recognition at Epoch 40 are presented in Table \ref{tab:a
     \label{tab:allresults40}
     \begin{tabular}{lllll}
         \toprule
-        \multirow{2}{*}{Models} & \multicolumn{4}{c}{mAP} \\
+        \multirow{2}{*}{Models} & \multicolumn{4}{c}{mAP (Epoch 40)} \\
         \cmidrule{2-5} 
         {} & Overall & Head  & Middle & Tail \\
         \midrule
-        IC            & 52.33   & 69.53 & 60.52 & 45.79 \\        
-        AFRICAN-AR    & \textbf{54.02} & \textbf{73.54} & \textbf{64.38} & \textbf{46.21} \\
+        IC            & 52.48   & 69.53 & 60.52 & 45.79 \\        
+        AFRICAN-AR    & \textbf{54.30} & \textbf{73.54} & \textbf{64.38} & \textbf{46.21} \\
         \bottomrule
     \end{tabular}
 \end{table}
 
 
 \section{Final Result}
-When comparing the AFRICAN-AR model with the baseline model, CARe, AFRICAN-AR consistently outperforms CARe across all segments. Table \ref{tab:allresultsbest} displays the final performance of CARe, IC, AFRICAN-AR and MSQNet. AFRICAN-AR successfully outperforms the baseline model with 24.53\% mAP for all classes, 10.83\% for the head classes, 26.98\% for the middle classes, and 22.53\% for the tail classes. The comparison with the state-of-the-art model, MSQNet, will be discussed in the section \ref{sec:discussion_msqnet}
+To fairly compare AFRICAN-AR and IC with the baseline model, CARe, Table \ref{tab:allresultsbest} displays the best result of the CARe, IC (Epoch 29), AFRICAN-AR (Epoch 34), and MSQNet. It is evident that AFRICAN-AR consistently outperforms CARe across all segments, with 24.90\% overall mAP improvement, 9.66\% improvement in head classes, 25.84\% improvement in middle classes, and 23.45\% improvement in tail classes, enabling it to achieve its best score of 55.45\% mAP. The comparison with the state-of-the-art model, MSQNet, will be discussed in the section \ref{sec:discussion_msqnet}
 
 \begin{table}[ht]
     \centering
@@ -208,14 +209,14 @@ When comparing the AFRICAN-AR model with the baseline model, CARe, AFRICAN-AR co
     
     \begin{tabular}{lllll}
         \toprule
-        \multirow{2}{*}{Models} & \multicolumn{4}{c}{mAP} \\
+        \multirow{2}{*}{Models} & \multicolumn{4}{c}{mAP (Best Epoch)} \\
         \cmidrule{2-5} 
         {} & Overall & Head  & Middle & Tail \\
         \midrule
-        CARe\parencite{ng2022animal}       & 30.55   & 63.33 & 38.62  & 25.09 \\
-        IC          & 54.67   & \uuline{71.72} & \uuline{63.31} & \textbf{48.96} \\
-        AFRICAN-AR     & \uuline{55.08} & \textbf{74.16} & \textbf{65.60} & \uuline{47.75} \\
-        MSQNet\parencite{mondal2023msqnet}     & \textbf{67.74}   &  -    & -     & - \\ 
+        CARe\parencite{ng2022animal}       & 30.55          & 63.33          & 38.62          & 25.09 \\
+        IC                                 & 54.79          & \uuline{70.18} & \uuline{62.76} & \textbf{48.54} \\
+        AFRICAN-AR                         & \uuline{55.45} & \textbf{72.99} & \textbf{64.46} & \textbf{48.54} \\
+        MSQNet\parencite{mondal2023msqnet} & \textbf{67.74}   &  -    & -     & - \\ 
         \bottomrule
     \end{tabular}
 \end{table}

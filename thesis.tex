@@ -56,7 +56,7 @@
 \begin{abstract} %TODO: finish it
 % Abstract should be not more than 300 words, for either MSc or PhD.
 
-This research discusses the solutions to two significant challenges for animal action recognition: the long-tail issue and the temporal redundancy problem. The CLIP model, paired with text prompt engineering, is investigated as a potential solution for the long-tail problem. Simultaneously, the AFRICAN approach is introduced to handle the temporal redundancy problem. By integrating CLIP into AFRICAN, this augmented model outperforms the baseline model with 24.53\% overall mAP for all classes.
+This research discusses the solutions to two significant challenges for animal action recognition: the long-tail issue and the temporal redundancy problem. The CLIP model, paired with text prompt engineering, is investigated as a potential solution for the long-tail problem. Simultaneously, the AFRICAN approach is introduced to handle the temporal redundancy problem. By integrating CLIP into AFRICAN, this augmented model outperforms the baseline model with 24.90\% to achieve 55.45\% overall mAP for all classes. Code is made available at: \href{https://github.com/GoatWang/AFRICAN}{https://github.com/GoatWang/AFRICAN}
 
 The primary contributions of this research are:
 
@@ -64,7 +64,7 @@ The primary contributions of this research are:
     \item Comprehensive investigation into the challenges associated with the long-tail and temporal redundancy issues in action recognition tasks.
     \item Exploration of the CLIP model combined with text prompt engineering as a solution for the long-tail issue. This approach converts the traditional one-hot encoding learning target to class embedding, enhancing the model's performance, especially for middle and tail classes.
     \item Introduction of AFRICAN, a novel method leveraging the contrastive learning framework, to focus on the subtle and fine-grained differences between video frames, addressing the temporal redundancy issue effectively.
-    \item Extensive experimentation, as detailed from page 27 onwards, demonstrating the efficacy of the CLIP model with text prompt engineering and AFRICAN in addressing their respective challenges.
+    \item Extensive experimentation, as detailed from page 27 onwards, demonstrates the efficacy of the CLIP model with text prompt engineering and AFRICAN in addressing their respective challenges.
     \item A comparative discussion on the performance of ImageCLIP versus VideoCLIP, coupled with insights into why the state-of-the-art model, MSQNet, excels over AFRICAN.
 \end{itemize}
 \end{abstract}

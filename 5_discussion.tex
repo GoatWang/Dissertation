@@ -8,36 +8,40 @@ With the Animal Kingdom dataset containing more than 50 hours of animal video cl
 
 \begin{enumerate}
     \item \textbf{VC\_AT}: The VC\_Proj model adds a 12-layer transformer, which is the same as the ImageClip settings in Figure \ref{fig:modelstructure_ic}. Rather than pooling all outputs of ViT's last layer, the embeddings of patches in the same frame are pooled together to obtain the frame-based embedding, which is used as input for the 12-layer transformer.
-    \item \textbf{VC\_DF}: This setting is the same as the VC\_Proj model but with two more learnable layers. The Uniformer V2 model, which is the structure used by Invernvideo's video CLIP module, enhances the cross-frame relationship on the final 4 layers of ViT. There are two mechanisms to achieve this, Deep Position Embedding (DPE), a series of 3D CNN layers, and Feed Forward Network (FFN), the attention mechanism on the cls token with two linear layers. These two layers are learnable in this setting.
+    \item \textbf{VC\_DF}: This setting is the same as the VC\_Proj model but with two more modules in the Uniformer V2 learnable: C\_MHRA and DPE, which are introduced in \ref{sec:rw_uniformer}. 
 \end{enumerate}
 
-Table \ref{tab:ablation_vc} and Figure \ref{fig:ablation_vc} show the results of the models with different learnable weights and the performance on each epoch. As illustrated in the figure, it is clear that the VC\_AT model is able to improve the VC\_Proj model to get closer to IC, proving that more learnable weights are indeed helpful for better fitting. Taking advantage of the well-designed mechanism of Uniformer V2, the VC\_DF model is able to achieve a higher score (55.98 mAP) than the IC model (54.36) as demonstrated in the table. 
-
-\begin{table}[ht]
-    \centering
-    \caption[Training Results for Models with Different Learnable Weights] {This table illustrates the training results for models with different learnable weights. \textbf{VC\_Vision} is VideoCLIP with vision layers learnable, as illustrated in Figure \ref{fig:modelstructure_vc} with a learnable video encoder. \textbf{VC\_Proj} is VideoCLIP with only projection layers learnable, as illustrated in Figure \ref{fig:modelstructure_vc} with a frozen video encoder. \textbf{IC} is ImageCLIP trained on post-transformer layers, as illustrated in Figure \ref{fig:modelstructure_ic} with a frozen image encoder. \textbf{VC\_AT} is the VC\_Proj model that adds a 12-layer transformer. \textbf{VC\_DF}: is the same as the VC\_Proj model but with two more learnable layers.}
-    \label{tab:ablation_vc}
-    \begin{tabular}{lllll}
-        \toprule
-        \multirow{2}{*}{Models} & Accuracy \\
-        \cmidrule{2-2} 
-        {} &  Best Epoch \\
-        \midrule
-        VC\_Vision & 25.74 \\
-        VC\_Proj   & 48.56 \\
-        IC         & 54.36 \\
-        VC\_AT     & 52.79 \\
-        VC\_DF     & 55.98 \\
-        \bottomrule
-    \end{tabular}
-\end{table}
+These models are all trained for 44 epochs, using a binary cross-entropy loss function, the adamw optimizer, and a learning rate of 0.00015. The VC\_Vision model employs a batch size of 16 due to memory constraints, while batch sizes of 128 are used for all the other models. The mAP on the overall, head, middle, and tail classes are used as evaluation metrics for this comparison.
 
 \begin{figure}[ht]
     \centering
-    \resizebox{0.8\textwidth}{!}{\input{"assets/charts/5_1_AblationVC.pgf"}}
+    \resizebox{0.7\textwidth}{!}{\input{"assets/charts/5_1_AblationVC.pgf"}}
     \caption[mAP of VC\_Vision, VC\_Proj, IC, VC\_AT, VC\_DF on each Epoch]{This chart illustrates the mAP of VC\_Vision, VC\_Proj, IC, VC\_AT, VC\_DF on each epoch.}
     \label{fig:ablation_vc}
 \end{figure}
+
+The performance on each epoch during the training process is illustrated in Figure \ref{fig:ablation_vc}. As the results are still improving slightly, the performance of the final epoch, Epoch 44, is selected for comparison. Table \ref{tab:ablation_vc} display the results of the models with different learnable weights and the performance on Epoch 44.
+
+As illustrated in the figure, it is clear that the VC\_AT model is able to improve the VC\_Proj model to surpass IC, proving that more learnable weights are indeed helpful for better fitting. Taking advantage of the well-designed mechanism of Uniformer V2, the VC\_DF model is able to achieve a higher score of 55.98\% mAP than the IC model of 52.24\% mAP on Epoch 44 as demonstrated in the table. 
+
+\begin{table}[ht]
+    \centering
+    \caption[Training Results for Models with Different Learnable Weights] {This table illustrates the training results for models with different learnable weights. \textbf{VC\_Vision} is VideoCLIP with vision layers learnable, as illustrated in Figure \ref{fig:modelstructure_vc} with a learnable video encoder. \textbf{VC\_Proj} is VideoCLIP with only projection layers learnable, as illustrated in Figure \ref{fig:modelstructure_vc} with a frozen video encoder. \textbf{IC} is ImageCLIP trained on post-transformer layers, as illustrated in Figure \ref{fig:modelstructure_ic} with a frozen image encoder. \textbf{VC\_AT} is the VC\_Proj model that adds a 12-layer transformer. \textbf{VC\_DF} is the same as the VC\_Proj model but with two more Uniformer V2 learnable modules: C\_MHRA and DPE.}
+    \label{tab:ablation_vc}
+    \begin{tabular}{lllll}
+        \toprule
+        \multirow{2}{*}{Models} & mAP \\
+        \cmidrule{2-2} 
+        {} & Epoch 44 \\
+        \midrule
+        VC\_Vision & 24.60 \\
+        VC\_Proj   & 48.36 \\
+        IC         & 52.24 \\
+        VC\_AT     & 51.99 \\
+        VC\_DF     & 53.84 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
 
 \section{Why Does MSQNet perform better than AFRICAN?}
 \label{sec:discussion_msqnet}
@@ -53,7 +57,7 @@ Table \ref{tab:ablation_vc} and Figure \ref{fig:ablation_vc} show the results of
 Figure \ref{fig:discussion_msqnet} presents the model structure of MSQNet. The core module of this structure is the Multi-Modal Transformer Decoder (MMTD). The entire structure can be divided into three parts: 
 
 \begin{enumerate}
-    \item \textbf{Key and Value of MMTD}: The input video $X \in \mathbf{R}^{N, T, C, H, W}$ is processed by the video encoder, specifically the TimeSformer, where $N$ represents the batch size, $T$ represents the number of frames, and C, H and W represents the channels, width and height of a frame, respectively. By averaging pooling patch embeddings generated by the video encoder within the same frame, frame-level embeddings are obtained. These embeddings are subsequently multiplied by the projection weights $W \in \mathbf{R}^{D \times D}$ to yield the key and value of the MMTD in the shape $(N, D)$. 
+    \item \textbf{Key and Value of MMTD}: The input video $X \in \mathbf{R}^{N, T, C, H, W}$ is processed by the video encoder, specifically the TimeSformer, where $N$ represents the batch size, $T$ represents the number of frames, and C, H and W represents the channels, width and height of a frame, respectively. By averaging pooling patch embeddings generated by the video encoder within the same frame, frame-level embeddings are obtained. These embeddings are subsequently multiplied by the projection weights $W \in \mathbf{R}^{D \times D}$ to yield the key and value of the MMTD in the shape $(N, D)$, where $D$ denotes the embedding dimension. 
     \item \textbf{Query of MMTD}: The video embedding $Q_v \in \mathbf{R}^{N \times D}$ is derived from the average pooling of frame embeddings encoded by the image encoder of CLIP. The learnable class embedding $Q_l \in \mathbf{R}^{K \times D}$ is initialised with the text encoder of CLIP, taking the original label text as input, where $K$ denotes the number of classes. To produce a query $Q \in \mathbf{R}^{K \times D}$, the embeddings $Q_v$ and $Q_l$ are concatenated, resulting in $Q \in \mathbf{R}^{K \times 2D}$, which is then projected using the weight $W \in \mathbf{R}^{2D \times D}$. 
     \item \textbf{operation of MMTD}: Several layers of the cross-attention mechanism are applied to the query, key, and value to produce the embedding for each class $Q^l \in \mathbf{R}^{K \times D}$, where $l \in L$ represents the. This is then followed by an FFN module to produce the class logits.
 \end{enumerate}
@@ -62,56 +66,53 @@ Figure \ref{fig:discussion_msqnet} presents the model structure of MSQNet. The c
 Three key differences exist between AFRICAN and MSQNet: 
 
 \begin{enumerate}
-    \item \textbf{Cross-Attention}: The cross-attention mechanism enables the model to compute attention between the label embeddings and frame-level embedding, which is the most meticulously designed mechanism in this structure.
-    \item \textbf{Learnable label Embedding}: Unlike AFRICAN, which uses fixed label embedding, MSQNet initialises the learnable label embedding with values produced by the pretrained CLIP model. This allows the model to update the weights of the label embedding to fit better.
+    \item \textbf{Cross-Attention}: The cross-attention mechanism allows the model to compute attention between the label embeddings and frame-level embeddings, which is the most meticulously designed mechanism in this structure.
+    \item \textbf{Learnable label Embedding}: Unlike AFRICAN, which uses fixed label embedding, MSQNet initialises the learnable label embedding using values produced by the pretrained CLIP model. This allows the model to update the weights of the label embedding to fit better.
     \item \textbf{Fusion of Image and Text Embedding}: Instead of adopting CLIP's similarity calculation method, MSQNet concatenates the text and video embeddings with a projection layer to fuse them together. 
 \end{enumerate}
 
-These features make MSQNet more adaptable to fit on a medium-sized dataset. On the contrary, AFRICAN tries to mimic the training scheme to directly calculate the image-text similarity for action recognition. Although this enables the model to update a minimum number of parameters to achieve an acceptable result, it restricts the model's potential to better fit the data. Given that MSQNet was published a month prior to the submission of this dissertation and their code is not yet publicly available, the improvement may be further studied in the future.
+These features make MSQNet more adaptable to medium-sized datasets. In contrast, AFRICAN tries to mimic the training scheme to directly calculate the image-text similarity for action recognition. Although this enables the model to update a minimum number of parameters to achieve an acceptable result, it restricts the model's potential to better fit the data. 
 
 \subsection{Implementation}
-To better quantify the improvement caused by the three differences mentioned above. I do the following three experiments
+To better understand these differences, the following experiments are conducted: 
 
 \begin{enumerate}
-    \item \textbf{}: 
-    \item \textbf{}
-    \item \textbf{}
-    \item \textbf{}
+    \item \textbf{VC\_DF} is the same with VC\_DF in \ref{sec:discussion_vc}, which uses AFRICAN architecture and VideoCLIP backbone with projection layers learnable and two more Uniformer V2 modules learnable: C\_MHRA and DPE.
+    \item \textbf{MSQ\_TS\_LLE} is the best setting presented in MDQNet paper \parencite{mondal2023msqnet}, which uses TimeSformer as the backbone with all layers learnable and makes label embeddings learnable. 
+    \item \textbf{MSQ\_VCVision\_LLE} uses MSQNet architecture with VC\_Vision as the backbone and learnable label embeddings. 
+    \item \textbf{MSQ\_VCDF\_LLE} use MSQNet architecture with VC\_DF as the backbone and learnable label embeddings. 
 \end{enumerate}
 
+% \begin{table}[ht]
+%     \centering
+%     \caption[Imperiments to Reproduce MSQNet Results] {The illustrates the experiments to reproduce MSQNet results, where LLE represents the learnable label embeddings. \textbf{VC\_DF} uses AFRICAN architecture and VideoCLIP backbone with projection layers learnable and two more Uniformer V2 modules learnable: C\_MHRA and DPE. \textbf{MSQ\_TS\_LLE} is the best setting presented in MDQNet paper \parencite{mondal2023msqnet}, which uses TimeSformer as the backbone with all layers learnable and makes label embeddings learnable. \textbf{MSQ\_VCVision\_LLE} use MSQNet architecture with VC\_Vision as the backbone. \textbf{MSQ\_VCDF\_LLE} use MSQNet architecture with VC\_DF as the backbone.}
+%     \label{tab:implementation_msqnet}
+%     \begin{tabular}{lllll}
+%         \toprule
+%         \multirow{2}{*}{Models} & \multirow{2}{*}{Architecture} & \multirow{2}{*}{Backbone} & \multirow{2}{*}{LLE} & mAP \\
+%         {} & {} & {} & {} & Epoch 30 \\
+%         \midrule
+%         VC\_DF               & AFRICAN & VC\_DF     & False & 53.33 \\
+%         MSQ\_TS\_LLE         & MSQNet  & TS         & True  & 3.59  \\
+%         MSQ\_VCVision\_LLE   & MSQNet  & VC\_Vision & True  & 4.60  \\
+%         MSQ\_VCDF\_LLE       & MSQNet  & VC\_DF     & True  & 34.50 \\
+%         \bottomrule
+%     \end{tabular}
+% \end{table}
 
-
-
-learnable label embedding
-LLE
-\begin{table}[ht]
+\begin{figure}[ht]
     \centering
-    \caption[] {}
-    \label{tab:ablation_vc}
-    \begin{tabular}{lllll}
-        \toprule
-        \multirow{2}{*}{Models} & Accuracy \\
-        \cmidrule{2-2} 
-        {} &  Best Epoch \\
-        \midrule
-        VC\_DF & 25.74 \\
-        MSQ_TS_LLE   & 48.56 \\
-        MSQ_VC_LLE   & 48.56 \\
-        MSQ_TS_LLE         & 54.36 \\
-        VC\_AT     & 52.79 \\
-        VC\_DF     & 55.98 \\
-        \bottomrule
-    \end{tabular}
-\end{table}
+    \includegraphics[width=0.8\textwidth]{assets/charts/5_2_MSQ_reproduce}
+    \caption[Model Structure of MSQNet]{Illustration of MSQNet's model structure. Source \parencite{mondal2023msqnet}}
+    \label{fig:implementation_msqnet}
+\end{figure}
+
+Given that MSQNet was published a month prior to the submission of this dissertation and their code is not yet publicly available, the exact re-implementation of the same settings is unattainable. As a result, it does not produce the same results as they reported. 
+
+However, all core differences listed above have been implemented. Figure \ref{fig:implementation_msqnet} illustrates the results of these experiments. Most of the experiments using MSQNet architecture did not train successfully. In addition, it is observed that the concatenation of text and video embedding produced from CLIP, instead of the similarity calculation, may be a significant barrier for the model to warm up and begin to learn something valuable, as the green line indicates, the performance of MSQ\_VCDF\_LLE starts to grow after Epoch 17. In conclusion, this research could not identify the key performance enhancements caused by the MSQNet and this may be further studied in the future.
 
 
 
-Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test.
-Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test.
-Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test.
-Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test.
-Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test.
-Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test.
 % \subsection{The effect smaller of batch size}
 % Owing to the 80 Gb limitation of A100 GPU, I am able to train the fully learnable model, VC\_Vision, with a batch size of 16. To investigate the effect of this, I compare the 
 

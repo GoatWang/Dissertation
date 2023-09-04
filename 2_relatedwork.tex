@@ -126,7 +126,9 @@ The subsequent subsections will elaborate on the mechanisms of Multi-Head Attent
     \label{fig:attentionmechanism}
 \end{figure}
 
-To clearly introduce ViT, it's pivotal to understand the Transformer's attention mechanism. The attention mechanism of the Transformer is visually described in Figure \ref{fig:attentionmechanism}. Given the input data $X \in \mathbf{R}^{S \times d_k}$, where $S$ denotes the sequence length and $d_k$ represents the embedding dimension, the initial step involves transforming the input vector using matrices $W_q \in \mathbf{R}^{d_k \times d_k}$, $W_k \in \mathbf{R}^{d_k \times d_k}$, and $W_v \in \mathbf{R}^{d_k \times d_k}$, producing three new vectors: query $Q \in \mathbf{R}^{S \times d_k}$, key $K \in \mathbf{R}^{S \times d_k}$, and value $V \in \mathbf{R}^{S \times d_k}$, as shown in the grey linear block of Figure \ref{fig:multiheadattention}.
+To clearly introduce ViT, it's pivotal to understand the Transformer's attention mechanism. This mechanism is visually described in Figure \ref{fig:attentionmechanism}. 
+
+Given the input data $X \in \mathbf{R}^{S \times d_k}$, where $S$ denotes the sequence length and $d_k$ represents the embedding dimension, the initial step involves multiplying the input vector with matrices $W_q \in \mathbf{R}^{d_k \times d_k}$, $W_k \in \mathbf{R}^{d_k \times d_k}$, and $W_v \in \mathbf{R}^{d_k \times d_k}$, producing three new vectors: query $Q \in \mathbf{R}^{S \times d_k}$, key $K \in \mathbf{R}^{S \times d_k}$, and value $V \in \mathbf{R}^{S \times d_k}$, as shown in the grey linear block of Figure \ref{fig:multiheadattention}.
 
 These vectors, $Q$, $K$, and $V$ are then divided into $H$ heads, reshaping them to $(S, \frac{d_k}{H})$. The vectors for each head, specifically, $Q \in \mathbf{R}^{S \times \frac{d_k}{H}}$, $K \in \mathbf{R}^{S \times \frac{d_k}{H}}$, and $V \in \mathbf{R}^{S \times \frac{d_k}{H}}$ are then processed using the Scaled Dot-Product Attention, as illustrated in Figure \ref{fig:dotproductattention}. 
 
@@ -152,13 +154,13 @@ The architecture of the Vision Transformer (ViT) for classification is illustrat
 
 At the beginning of the sequence of embedded patches, a learnable $cls$ token (represented by $*$ in the figure) is inserted. This sequence of embeddings, including the $cls$ token, is then added with learnable positional embeddings, as indicated by the small purple blocks in the figure. Afterwards, the sequence is fed into the Transformer Encoder block. 
 
-The Transformer Encoder, on the right side of the figure, is composed of $L$ consecutive layers. Within each layer, the processing steps contain two normalisation layers, a multi-head attention mechanism, two identity mappings, and a multi-layer perception (MLP) block. After processing through the Encoder, the final MLP head operates on the $cls$ token to produce logits for each classification category.
+The Transformer Encoder, on the right side of the figure, is composed of $L$ consecutive layers. Within each layer, the processing steps contain two normalisation layers, a multi-head attention mechanism, two identity mappings, and a multi-layer perceptron (MLP) block. After processing through the Encoder, the final MLP Head, the orange block on the top-left of the figure, operates on the $cls$ token or pooling result of all token embeddings to produce logits for each classification category.
 
 \subsection{TimeSformer}
 \begin{figure}[ht]
     \centering
     \includegraphics[width=1.0\textwidth]{assets/charts_rw/Timesformer}
-    \caption[Five different space-time attention schemes studied by TimeSformer]{Illustration of the five different space-time attention schemes studied by TimeSformer. Source: \parencite{bertasius2021space}}
+    \caption[Five different space-time attention schemes studied by TimeSformer]{Illustration of the five different space-time attention schemes studied by TimeSformer. The patches in blue masks are the query patches, while patches in other masks will be used in the self-attention mechanism for the query. Masks in different colours, except blue, are used for separate attentions. Source: \parencite{bertasius2021space}}
     \label{fig:structurestimesformer}
 \end{figure}
 
@@ -168,6 +170,7 @@ To address this challenge, TimeSformer introduces an innovative approach to mana
 
 
 \subsection{Uniformer and Uniformer V2}
+\label{sec:rw_uniformer}
 \begin{figure}[ht]
     \centering
     \includegraphics[width=1.0\textwidth]{assets/charts_rw/Uniformer}
@@ -192,7 +195,7 @@ Figure \ref{fig:structureuniformer} displays the architecture of Uniformer, segm
     \label{fig:structureuniformerv2}
 \end{figure}
 
-As shown in Figure \ref{fig:structureuniformerv2}, Uniformer V2 is composed of a sequence of Local Unibolck V2 and Global Uniblock V2. Each Local Unibolck V2 contains a Local Temporal MHRA (denoted as LT\_MHRA), a Global Spatial MHRA (GS\_MHRA), and an FFN. The LT\_MHRA applies the attention mechanism on every $t\times1\times$ tube in a video, while the GS\_MHRA functions as the original ViT Block. The FFN includes two linear layers and a GELU layer. 
+As shown in Figure \ref{fig:structureuniformerv2}, Uniformer V2 is composed of a sequence of Local Unibolck V2 and Global Uniblock V2. Each Local Unibolck V2 contains a Local Temporal MHRA (denoted as LT\_MHRA), a Global Spatial MHRA (GS\_MHRA), and an FFN. The LT\_MHRA applies the attention mechanism on every $t\times1\times1$ tube in a video, while the GS\_MHRA functions as the original ViT Block. The FFN includes two linear layers and a GELU layer. 
 
 In contrast, each Global Uniblock V2 contains a DPE layer, a Global Cross Spatial attention MHRA (C\_MHRA), and an FFN. The DPE layer and FFN has been introduced in the previous section. The core operation of C\_MHRA is cross attention. 
 
@@ -233,3 +236,4 @@ $\tau$ is a temperature parameter that scales the logits before applying the sof
 
 % \subsection{Video CLIP module in InternVideo}
 
+\textbf{}
